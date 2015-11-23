@@ -2,6 +2,7 @@ from Features import Feature100
 from Features import Feature103
 from Features import Feature104
 from datetime import datetime
+import numpy as np
 
 class MemmTrain:
     features = []
@@ -30,6 +31,7 @@ class MemmTrain:
             self.word_tag_tuple.add((split_word[0], split_word[1]))
 
         clean_sentence = ' '.join(words)
+
         for tag in tags:
             self.possibleTags.add(tag)
         for word in words:
@@ -59,6 +61,11 @@ class MemmTrain:
             val = x.apply_features([1]*len(x.features), self.features, tup)
             print(val)
 
+    def calc_features2(self):
+        for tup in self.trainingSetTuples:
+            val = x.apply_features(np.array([1]*len(x.features)), np.array(self.features), np.array(tup))
+            print(val)
+
     # def make_tags_features100(self):
     #     for word_i in self.possibleWords:
     #         for tag_j in self.possibleTags:
@@ -66,6 +73,11 @@ class MemmTrain:
 
     def make_tags_features100(self):
         for tup in self.word_tag_tuple:
+            t = Feature100(tup[0], tup[1])
+            for his in self.trainingSetTuples:
+                print(t.calc(his))
+
+
             self.features.append(Feature100(tup[0], tup[1]))
 
     def make_tags_features104(self):
@@ -78,6 +90,11 @@ class MemmTrain:
             for tags_j in self.possibleTags:
                 for tags_k in self.possibleTags:
                     self.features.append(Feature103(tags_i, tags_j, tags_k))
+
+    def test(self):
+        x = np.array([1, 2, 3])
+        y = np.array([4, 5, 6])
+        print(x*y)
 
 x = MemmTrain()
 startTime = datetime.now()
@@ -92,10 +109,13 @@ x.make_tags_features104()
 # print(len(x.features))
 # print(len(x.possibleWords))
 
-x.calc_features()
-print(datetime.now() - startTime)
+# x.calc_features()
+# print(len(x.trainingSetTuples))
+# print(datetime.now() - startTime)
 
 #print(x.trainingSetTuples.pop())
 
 # print(len(x.possibleWords))
+
+# x.test()
 
