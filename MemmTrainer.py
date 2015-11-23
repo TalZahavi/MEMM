@@ -1,4 +1,5 @@
 from datetime import datetime
+import numpy as np
 
 
 class MemmTrainer:
@@ -7,6 +8,7 @@ class MemmTrainer:
         self.word_to_tags_dict = dict()
         self.bigram_tag_dict = dict()
         self.trigram_tag_dict = dict()
+        self.features_matrix = np.zeros(shape=(0, 0), dtype=int)
 
     def train_history_tag_tuples(self):
         with open('train.wtag', 'r') as f:
@@ -83,14 +85,50 @@ class MemmTrainer:
         else:
             self.trigram_tag_dict[tag] = {(tag_minus_two, tag_minus): [history_num]}
 
+    def count_number_of_features(self):
+        features_count = 0
+        for key in self.word_to_tags_dict:
+            features_count += len(self.word_to_tags_dict[key])
+        for key in self.bigram_tag_dict:
+            features_count += len(self.bigram_tag_dict[key])
+        for key in self.trigram_tag_dict:
+            features_count += len(self.trigram_tag_dict[key])
+        return features_count
 
+    def fill_in_features_matrix(self):
+        self.features_matrix = np.zeros(shape=(len(self.history_tag_tuples), self.count_number_of_features()), dtype=int)
+
+        feature_num = 0
+        for key in self.word_to_tags_dict:
+            tags_for_word_dict = self.word_to_tags_dict[key]
+            for key_tags in tags_for_word_dict:
+                one_list = tags_for_word_dict[key_tags]
+                for one_index in one_list:
+                    self.features_matrix[one_index][feature_num] = 1
+                feature_num += 1
+
+        for key in self.bigram_tag_dict:
+            last_tag_dict = self.bigram_tag_dict[key]
+            for key_tags in last_tag_dict:
+                one_list = last_tag_dict[key_tags]
+                for one_index in one_list:
+                    self.features_matrix[one_index][feature_num] = 1
+                feature_num += 1
+
+        for key in self.trigram_tag_dict:
+            last_two_tags_dict = self.trigram_tag_dict[key]
+            for key_tags in last_two_tags_dict:
+                one_list = last_two_tags_dict[key_tags]
+                for one_index in one_list:
+                    self.features_matrix[one_index][feature_num] = 1
+                feature_num += 1
 
 startTime = datetime.now()
 ###############################
 trainer = MemmTrainer()
 trainer.train_history_tag_tuples()
 trainer.train_dicts()
-
+trainer.fill_in_features_matrix()
 ###############################
 print(datetime.now() - startTime)
 
