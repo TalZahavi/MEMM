@@ -104,7 +104,7 @@ class MemmTrainer:
             for key_tags in tags_for_word_dict:
                 one_list = tags_for_word_dict[key_tags]
                 for one_index in one_list:
-                    self.features_matrix[one_index][feature_num] = 1
+                    self.features_matrix[one_index, feature_num] = 1
                 feature_num += 1
 
         for key in self.bigram_tag_dict:
@@ -112,7 +112,7 @@ class MemmTrainer:
             for key_tags in last_tag_dict:
                 one_list = last_tag_dict[key_tags]
                 for one_index in one_list:
-                    self.features_matrix[one_index][feature_num] = 1
+                    self.features_matrix[one_index, feature_num] = 1
                 feature_num += 1
 
         for key in self.trigram_tag_dict:
@@ -120,15 +120,78 @@ class MemmTrainer:
             for key_tags in last_two_tags_dict:
                 one_list = last_two_tags_dict[key_tags]
                 for one_index in one_list:
-                    self.features_matrix[one_index][feature_num] = 1
+                    self.features_matrix[one_index, feature_num] = 1
                 feature_num += 1
+
+    def fill_in_features_matrix2(self):
+        self.features_m = dict()
+
+        feature_num = 0
+        for key in self.word_to_tags_dict:
+            tags_for_word_dict = self.word_to_tags_dict[key]
+            for key_tags in tags_for_word_dict:
+                one_list = tags_for_word_dict[key_tags]
+                for one_index in one_list:
+                    # self.features_matrix[one_index, feature_num] = 1
+                    if feature_num in self.features_m:
+                        index_list = self.features_m[feature_num]
+                        index_list.append(one_index)
+                    else:
+                        self.features_m[feature_num] = [one_index]
+                feature_num += 1
+
+        for key in self.bigram_tag_dict:
+            last_tag_dict = self.bigram_tag_dict[key]
+            for key_tags in last_tag_dict:
+                one_list = last_tag_dict[key_tags]
+                for one_index in one_list:
+                    # self.features_matrix[one_index, feature_num] = 1
+                    if feature_num in self.features_m:
+                        index_list = self.features_m[feature_num]
+                        index_list.append(one_index)
+                    else:
+                        self.features_m[feature_num] = [one_index]
+                feature_num += 1
+
+        for key in self.trigram_tag_dict:
+            last_two_tags_dict = self.trigram_tag_dict[key]
+            for key_tags in last_two_tags_dict:
+                one_list = last_two_tags_dict[key_tags]
+                for one_index in one_list:
+                    # self.features_matrix[one_index, feature_num] = 1
+                    if feature_num in self.features_m:
+                        index_list = self.features_m[feature_num]
+                        index_list.append(one_index)
+                    else:
+                        self.features_m[feature_num] = [one_index]
+                feature_num += 1
+
+    def func_l_part_one(self, v):
+        result = 0
+        for i in range(0, len(self.history_tag_tuples)):
+            result += np.dot(v, self.features_matrix[i, ])
+        print('Result 1 is ' + str(result))
+
+    def func_l_part_one2(self, v):
+        result = 0
+        for i in range(0, len(v)):
+            result += len(self.features_m[i])*v[i]
+        print('Result 2 is ' + str(result))
+
+
 
 startTime = datetime.now()
 ###############################
+
 trainer = MemmTrainer()
 trainer.train_history_tag_tuples()
 trainer.train_dicts()
-trainer.fill_in_features_matrix()
+
+# trainer.fill_in_features_matrix()
+# trainer.func_l_part_one(np.ones(shape=trainer.count_number_of_features(), dtype=int))
+
+trainer.fill_in_features_matrix2()
+trainer.func_l_part_one2(np.ones(shape=trainer.count_number_of_features(), dtype=int))
 ###############################
 print(datetime.now() - startTime)
 
