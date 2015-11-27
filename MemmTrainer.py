@@ -1,5 +1,6 @@
 from datetime import datetime
 import numpy as np
+from scipy.optimize import minimize
 
 
 class MemmTrainer:
@@ -180,7 +181,7 @@ class MemmTrainer:
 
     def func_l_part_one2(self, v):
         result = 0
-        for i in range(0, len(v)):
+        for i in range(0, self.count_number_of_features()):
             result += len(self.features_m[i])*v[i]
         return result
 
@@ -206,6 +207,7 @@ class MemmTrainer:
 
     def calculate_feature_vector(self, v_vector, train_tuple):
         result = 0
+        feature_num_index = len(self.features_num)
 
         word_tag = train_tuple[1]
         history = train_tuple[0]
@@ -215,10 +217,22 @@ class MemmTrainer:
 
         if (word, word_tag) in self.features_num:
             result += v_vector[self.features_num[(word, word_tag)]]
+        else:
+            self.features_num[(word, word_tag)] = feature_num_index
+            result += v_vector[feature_num_index]
+            feature_num_index += 1
         if (word_tag, history[1]) in self.features_num:
             result += v_vector[self.features_num[(word_tag, history[1])]]
+        else:
+            self.features_num[(word_tag, history[1])] = feature_num_index
+            result += v_vector[feature_num_index]
+            feature_num_index += 1
         if (word_tag, (history[0], history[1])) in self.features_num:
             result += v_vector[self.features_num[(word_tag, (history[0], history[1]))]]
+        else:
+            self.features_num[(word_tag, (history[0], history[1]))] = feature_num_index
+            result += v_vector[feature_num_index]
+            feature_num_index += 1
         return result
 
     def func_l_part_two(self, v_vector):
@@ -252,8 +266,11 @@ trainer.train_dicts()
 # trainer.func_l_part_one(np.ones(shape=trainer.count_number_of_features(), dtype=int))
 
 trainer.fill_in_features_matrix2()
-v = np.ones(shape=trainer.count_number_of_features(), dtype=int)
-trainer.func_l(v)
+v = np.zeros(shape=650320, dtype=int)
+
+# print(trainer.func_l(v))
+res = minimize(trainer.func_l, x0=v, method='L-BFGS-B')
+
 
 ###############################
 print(datetime.now() - startTime)
