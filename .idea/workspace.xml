@@ -23,11 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="MemmTrainer.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MemmTrainer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MemmTrainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="277" column="58" selection-start-line="277" selection-start-column="4" selection-end-line="277" selection-end-column="58" />
+            <state vertical-scroll-proportion="0.85333335">
+              <caret line="278" column="0" selection-start-line="278" selection-start-column="0" selection-end-line="278" selection-end-column="55" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
                 <element signature="e#464#608#0" expanded="false" />
@@ -42,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BasicModel.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BasicModel.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BasicModel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.29">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="207" column="0" selection-start-line="207" selection-start-column="0" selection-end-line="207" selection-end-column="0" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
                 <element signature="e#458#600#0" expanded="false" />
@@ -54,6 +54,8 @@
                 <element signature="e#1674#2055#0" expanded="false" />
                 <element signature="e#2215#2628#0" expanded="false" />
                 <element signature="e#2795#3210#0" expanded="false" />
+                <element signature="e#5524#6185#0" expanded="false" />
+                <element signature="e#6274#6434#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -900,10 +902,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MemmTrainer.py">
+    <entry file="file://$PROJECT_DIR$/BasicModel.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="277" column="58" selection-start-line="277" selection-start-column="4" selection-end-line="277" selection-end-column="58" />
+          <caret line="207" column="0" selection-start-line="207" selection-start-column="0" selection-end-line="207" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#458#600#0" expanded="false" />
+            <element signature="e#756#1578#0" expanded="false" />
+            <element signature="e#1674#2055#0" expanded="false" />
+            <element signature="e#2215#2628#0" expanded="false" />
+            <element signature="e#2795#3210#0" expanded="false" />
+            <element signature="e#5524#6185#0" expanded="false" />
+            <element signature="e#6274#6434#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MemmTrainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.85333335">
+          <caret line="278" column="0" selection-start-line="278" selection-start-column="0" selection-end-line="278" selection-end-column="55" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
             <element signature="e#464#608#0" expanded="false" />
@@ -913,21 +932,6 @@
             <element signature="e#3116#3672#0" expanded="false" />
             <element signature="e#3722#4082#0" expanded="false" />
             <element signature="e#8066#8588#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BasicModel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.29">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#458#600#0" expanded="false" />
-            <element signature="e#756#1578#0" expanded="false" />
-            <element signature="e#1674#2055#0" expanded="false" />
-            <element signature="e#2215#2628#0" expanded="false" />
-            <element signature="e#2795#3210#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -139,6 +139,7 @@ class BasicTrainer:
                         counter += 1
                         self.num_features += 1
 
+    # Return the result for v-dot-f on a given (history,tag) tuple
     def calculate_v_dot_f_for_tuple(self, data_tuple, v_vector):
         result = 0
 
@@ -159,11 +160,32 @@ class BasicTrainer:
 
         return result
 
+    # Calculate the first sum of L(v)
     def func_l_part_one(self, v_vector):
         result = 0
         for data_tuple in self.history_tag_tuples:
             result += self.calculate_v_dot_f_for_tuple(data_tuple, v_vector)
         return result
+
+    # Calculate the second sum of L(v)
+    def func_l_part_two(self, v_vector):
+        total_result = 0
+        for data_tuple in self.history_tag_tuples:
+            history = data_tuple[0]
+            features_on_tuples_array = []
+
+            for tag in self.tags:
+                features_on_tuples_array.append(self.calculate_v_dot_f_for_tuple((history, tag), v_vector))
+
+            exp_arr = np.exp(features_on_tuples_array)
+            total_result += np.log2(sum(exp_arr))
+
+        return total_result
+
+    def func_l(self, v_vector):
+        a = self.func_l_part_one(v_vector)
+        b = self.func_l_part_two(v_vector)
+        return a-b
 
 
 startTime = datetime.now()
@@ -179,7 +201,7 @@ x.get_frequented_features()
 print('After optimization, only ' + str(x.num_features) + ' features left\n')
 print('Init v vector,')
 v = np.ones(shape=x.num_features, dtype=int)
-print('Calculating function L(v) part one...')
-print('The result is ' + str(x.func_l_part_one(v)))
+print('Calculating function L(v) for a given V vector...')
+print('The result is ' + str(x.func_l(v)))
 
 print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
