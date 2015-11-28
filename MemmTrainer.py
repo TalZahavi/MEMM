@@ -218,21 +218,24 @@ class MemmTrainer:
         if (word, word_tag) in self.features_num:
             result += v_vector[self.features_num[(word, word_tag)]]
         else:
-            self.features_num[(word, word_tag)] = feature_num_index
-            result += v_vector[feature_num_index]
-            feature_num_index += 1
+            # self.features_num[(word, word_tag)] = feature_num_index
+            # result += v_vector[feature_num_index]
+            # feature_num_index += 1
+            pass
         if (word_tag, history[1]) in self.features_num:
             result += v_vector[self.features_num[(word_tag, history[1])]]
         else:
-            self.features_num[(word_tag, history[1])] = feature_num_index
-            result += v_vector[feature_num_index]
-            feature_num_index += 1
+            # self.features_num[(word_tag, history[1])] = feature_num_index
+            # result += v_vector[feature_num_index]
+            # feature_num_index += 1
+            pass
         if (word_tag, (history[0], history[1])) in self.features_num:
             result += v_vector[self.features_num[(word_tag, (history[0], history[1]))]]
         else:
-            self.features_num[(word_tag, (history[0], history[1]))] = feature_num_index
-            result += v_vector[feature_num_index]
-            feature_num_index += 1
+            # self.features_num[(word_tag, (history[0], history[1]))] = feature_num_index
+            # result += v_vector[feature_num_index]
+            # feature_num_index += 1
+            pass
         return result
 
     def func_l_part_two(self, v_vector):
@@ -266,10 +269,15 @@ trainer.train_dicts()
 # trainer.func_l_part_one(np.ones(shape=trainer.count_number_of_features(), dtype=int))
 
 trainer.fill_in_features_matrix2()
-v = np.zeros(shape=650320, dtype=int)
+# v = np.zeros(shape=650320, dtype=int)
 
 # print(trainer.func_l(v))
+# res = minimize(trainer.func_l, x0=v, method='L-BFGS-B')
+# print(res)
+
+v = np.zeros(shape=len(trainer.features_num)+3, dtype=int)
 res = minimize(trainer.func_l, x0=v, method='L-BFGS-B')
+print(res)
 
 
 ###############################
