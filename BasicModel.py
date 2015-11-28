@@ -1,4 +1,5 @@
 from datetime import datetime
+import numpy as np
 
 
 class BasicTrainer:
@@ -138,6 +139,33 @@ class BasicTrainer:
                         counter += 1
                         self.num_features += 1
 
+    def calculate_v_dot_f_for_tuple(self, data_tuple, v_vector):
+        result = 0
+
+        history = data_tuple[0]
+        word_tag = data_tuple[1]
+        word_index = history[3]
+        split_sentence = (history[2]).split()
+        word = split_sentence[word_index]
+        tag_minus = history[1]
+        tag_minus2 = history[0]
+
+        if (word, word_tag) in self.features:
+            result += v_vector[self.features[(word, word_tag)]]
+        if (tag_minus, word_tag) in self.features:
+            result += v_vector[self.features[(tag_minus, word_tag)]]
+        if ((tag_minus2, tag_minus), word_tag) in self.features:
+            result += v_vector[self.features[((tag_minus2, tag_minus), word_tag)]]
+
+        return result
+
+    def func_l_part_one(self, v_vector):
+        result = 0
+        for data_tuple in self.history_tag_tuples:
+            result += self.calculate_v_dot_f_for_tuple(data_tuple, v_vector)
+        return result
+
+
 startTime = datetime.now()
 x = BasicTrainer()
 x.get_history_tag_tuples()
@@ -148,5 +176,10 @@ x.fill_features_dicts()
 print('Done features searching. Found ' + str(x.num_features) + ' different features\n')
 print('Removing unfrequented features...')
 x.get_frequented_features()
-print('After optimization, only ' + str(x.num_features) + ' features left')
-print('\nFROM BEGINNING TO NOW ONLY ' + str(datetime.now() - startTime) + ' SECONDS!')
+print('After optimization, only ' + str(x.num_features) + ' features left\n')
+print('Init v vector,')
+v = np.ones(shape=x.num_features, dtype=int)
+print('Calculating function L(v) part one...')
+print('The result is ' + str(x.func_l_part_one(v)))
+
+print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
