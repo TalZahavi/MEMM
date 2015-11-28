@@ -248,6 +248,11 @@ class BasicTrainer:
 
         return total_result
 
+    def func_l_new(self, v_vector):
+        a = self.func_part1(v_vector)
+        b = self.func_part2(v_vector)
+        return a-b
+
 
 
 
@@ -277,6 +282,10 @@ print('Done calculating all possible features!\n')
 
 
 v = np.ones(shape=x.num_features, dtype=int)
+print('Lets try to calculate L(v) for given v...')
+start_start = datetime.now()
+x.func_l_new(v)
+print('It took me ' + str(datetime.now() - start_start))
 
 
 print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
