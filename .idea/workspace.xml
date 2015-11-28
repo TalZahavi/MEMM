@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7c0a5f1c-e8bc-4412-b0dc-85a0291fe492" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MemmTrainer.py" afterPath="$PROJECT_DIR$/MemmTrainer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BasicModel.py" afterPath="$PROJECT_DIR$/BasicModel.py" />
     </list>
     <ignored path="MEMM.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,15 +45,17 @@
       <file leaf-file-name="BasicModel.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BasicModel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.69666666">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.19333333">
+              <caret line="93" column="71" selection-start-line="93" selection-start-column="71" selection-end-line="93" selection-end-column="71" />
               <folding>
-                <element signature="e#407#549#0" expanded="false" />
-                <element signature="e#705#1527#0" expanded="false" />
-                <element signature="e#1623#2004#0" expanded="false" />
-                <element signature="e#2164#2643#0" expanded="false" />
-                <element signature="e#2810#3291#0" expanded="false" />
-                <element signature="e#3471#4025#0" expanded="false" />
+                <element signature="e#84#321#0" expanded="false" />
+                <element signature="e#439#581#0" expanded="false" />
+                <element signature="e#737#1559#0" expanded="false" />
+                <element signature="e#1655#2036#0" expanded="false" />
+                <element signature="e#2196#2609#0" expanded="false" />
+                <element signature="e#2776#3191#0" expanded="false" />
+                <element signature="e#3371#3859#0" expanded="false" />
+                <element signature="e#3908#4995#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -406,7 +407,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1064" extended-state="7" />
+    <frame x="-9" y="-9" width="1938" height="1064" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21770833" sideWeight="0.49339935" order="0" side_tool="false" content_ui="combo" />
@@ -441,7 +442,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="12" />
+      <option name="time" value="13" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -920,15 +921,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BasicModel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.69666666">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.19333333">
+          <caret line="93" column="71" selection-start-line="93" selection-start-column="71" selection-end-line="93" selection-end-column="71" />
           <folding>
-            <element signature="e#407#549#0" expanded="false" />
-            <element signature="e#705#1527#0" expanded="false" />
-            <element signature="e#1623#2004#0" expanded="false" />
-            <element signature="e#2164#2643#0" expanded="false" />
-            <element signature="e#2810#3291#0" expanded="false" />
-            <element signature="e#3471#4025#0" expanded="false" />
+            <element signature="e#84#321#0" expanded="false" />
+            <element signature="e#439#581#0" expanded="false" />
+            <element signature="e#737#1559#0" expanded="false" />
+            <element signature="e#1655#2036#0" expanded="false" />
+            <element signature="e#2196#2609#0" expanded="false" />
+            <element signature="e#2776#3191#0" expanded="false" />
+            <element signature="e#3371#3859#0" expanded="false" />
+            <element signature="e#3908#4995#0" expanded="false" />
           </folding>
         </state>
       </provider>

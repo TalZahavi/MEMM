@@ -11,6 +11,8 @@ class BasicTrainer:
         self.bigram_tag_dict = dict()
         self.trigram_tag_dict = dict()
 
+        self.features = dict()
+
     # Go over the training data and find all the (history,tag) tuples
     def get_history_tag_tuples(self):
         with open('train.wtag', 'r') as f:
@@ -62,8 +64,7 @@ class BasicTrainer:
             tags_per_word_dict = self.word_to_tags_dict[word]
 
             if word_tag in tags_per_word_dict:
-                num_times_features_seen = tags_per_word_dict[word_tag]
-                num_times_features_seen += 1
+                tags_per_word_dict[word_tag] += 1
             else:
                 tags_per_word_dict[word_tag] = 1
                 self.num_features += 1
@@ -79,8 +80,7 @@ class BasicTrainer:
             tag_per_tag_dict = self.bigram_tag_dict[word_tag]
 
             if tag_minus in tag_per_tag_dict:
-                num_times_features_seen = tag_per_tag_dict[tag_minus]
-                num_times_features_seen += 1
+                tag_per_tag_dict[tag_minus] += 1
             else:
                 tag_per_tag_dict[tag_minus] = 1
                 self.num_features += 1
@@ -96,8 +96,7 @@ class BasicTrainer:
             two_tags_per_tag_dict = self.trigram_tag_dict[word_tag]
 
             if (tag_minus2, tag_minus) in two_tags_per_tag_dict:
-                num_times_features_seen = two_tags_per_tag_dict[(tag_minus2, tag_minus)]
-                num_times_features_seen += 1
+                two_tags_per_tag_dict[(tag_minus2, tag_minus)] += 1
             else:
                 two_tags_per_tag_dict[(tag_minus2, tag_minus)] = 1
                 self.num_features += 1
@@ -106,15 +105,42 @@ class BasicTrainer:
             self.trigram_tag_dict[word_tag] = {(tag_minus2, tag_minus): 1}
             self.num_features += 1
 
+    def get_frequented_features(self):
+        counter = 0
+        self.num_features = 0
+        for word in self.word_to_tags_dict:
+            tag_to_word_dict = self.word_to_tags_dict[word]
+            for tag in tag_to_word_dict:
+                if tag_to_word_dict[tag] > 1:
+                    self.features[(word, tag)] = counter
+                    counter += 1
+                    self.num_features += 1
+
+        for tag in self.bigram_tag_dict:
+            tag_to_tag_dict = self.bigram_tag_dict[tag]
+            for tag_minus in tag_to_tag_dict:
+                if tag_to_tag_dict[tag_minus] > 1:
+                    self.features[(tag_minus, tag)] = counter
+                    counter += 1
+                    self.num_features += 1
+
+        for tag in self.trigram_tag_dict:
+            two_tag_to_tag_dict = self.trigram_tag_dict[tag]
+            for (tag_minus2, tag_minus) in two_tag_to_tag_dict:
+                if two_tag_to_tag_dict[(tag_minus2, tag_minus)] > 1:
+                    self.features[((tag_minus2, tag_minus), tag)] = counter
+                    counter += 1
+                    self.num_features += 1
+
 startTime = datetime.now()
 x = BasicTrainer()
 x.get_history_tag_tuples()
-print('')
-print('Found ' + str(len(x.history_tag_tuples)) + ' different history_tag tuples')
-print('Found ' + str(len(x.tags)) + ' different tags')
-print('')
+print('\nFound ' + str(len(x.history_tag_tuples)) + ' different history_tag tuples')
+print('Found ' + str(len(x.tags)) + ' different tags\n')
 print('Searching for all seen features in data...')
 x.fill_features_dicts()
-print('Done features searching. Found ' + str(x.num_features) + ' different features')
-print('')
-print('FROM BEGINNING TO NOW ONLY ' + str(datetime.now() - startTime) + ' SECONDS!')
+print('Done features searching. Found ' + str(x.num_features) + ' different features\n')
+print('Removing unfrequented features...')
+x.get_frequented_features()
+print('After optimization, only ' + str(x.num_features) + ' features left')
+print('\nFROM BEGINNING TO NOW ONLY ' + str(datetime.now() - startTime) + ' SECONDS!')
