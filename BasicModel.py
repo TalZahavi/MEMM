@@ -15,6 +15,8 @@ class BasicTrainer:
 
         self.features = dict()
 
+        self.calculated_features = dict()
+
     # Go over the training data and find all the (history,tag) tuples
     def get_history_tag_tuples(self):
         with open('train.wtag', 'r') as f:
@@ -140,6 +142,9 @@ class BasicTrainer:
                         counter += 1
                         self.num_features += 1
 
+    # TRY 1
+    ################################################################
+
     # Return the result for v-dot-f on a given (history,tag) tuple
     def calculate_v_dot_f_for_tuple(self, data_tuple, v_vector):
         result = 0
@@ -188,6 +193,65 @@ class BasicTrainer:
         b = self.func_l_part_two(v_vector)
         return a-b
 
+    # END TRY 1
+    #################################################################
+
+    # TRY 2
+    ################################################################
+
+    def calculate_all_v_dot_f_for_tuple(self):
+        for data_tuple in self.history_tag_tuples:
+            for word_tag in self.tags:
+
+                temp_arr = []
+
+                history = data_tuple[0]
+                word_index = history[3]
+                split_sentence = (history[2]).split()
+                word = split_sentence[word_index]
+                tag_minus = history[1]
+                tag_minus2 = history[0]
+
+                if (word, word_tag) in self.features:
+                    temp_arr.append(self.features[(word, word_tag)])
+                if (tag_minus, word_tag) in self.features:
+                    temp_arr.append(self.features[(tag_minus, word_tag)])
+                if ((tag_minus2, tag_minus), word_tag) in self.features:
+                    temp_arr.append(self.features[((tag_minus2, tag_minus), word_tag)])
+
+                self.calculated_features[(history, word_tag)] = temp_arr
+
+    def calculate_v_dot_f_for_tuple2(self, data_tuple, v_vector):
+        result = 0
+        features_num_arr = self.calculated_features[data_tuple]
+        for index in features_num_arr:
+            result += v_vector[index]
+        return result
+
+    def func_part1(self, v_vector):
+        result = 0
+        for data_tuple in self.history_tag_tuples:
+            result += self.calculate_v_dot_f_for_tuple2(data_tuple, v_vector)
+        return result
+
+    def func_part2(self, v_vector):
+        total_result = 0
+        for data_tuple in self.history_tag_tuples:
+            history = data_tuple[0]
+            features_on_tuples_array = []
+
+            for tag in self.tags:
+                features_on_tuples_array.append(self.calculate_v_dot_f_for_tuple2((history, tag), v_vector))
+
+            exp_arr = np.exp(features_on_tuples_array)
+            total_result += np.log2(sum(exp_arr))
+
+        return total_result
+
+
+
+
+
 
 startTime = datetime.now()
 x = BasicTrainer()
@@ -200,10 +264,19 @@ print('Done features searching. Found ' + str(x.num_features) + ' different feat
 print('Removing unfrequented features...')
 x.get_frequented_features()
 print('After optimization, only ' + str(x.num_features) + ' features left\n')
-print('Init v vector,')
+
+# print('Init v vector,')
+# v = np.ones(shape=x.num_features, dtype=int)
+# print('Calculating function L(v)...')
+# res = minimize(x.func_l, x0=v, method='L-BFGS-B')
+# print('The result is ' + str(res))
+
+print('Calculate features on all (history,tag) options...')
+x.calculate_all_v_dot_f_for_tuple()
+print('Done calculating all possible features!\n')
+
+
 v = np.ones(shape=x.num_features, dtype=int)
-print('Calculating function L(v)...')
-res = minimize(x.func_l, x0=v, method='L-BFGS-B')
-print('The result is ' + str(res))
+
 
 print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
