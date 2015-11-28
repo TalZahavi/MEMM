@@ -105,6 +105,9 @@ class BasicTrainer:
             self.trigram_tag_dict[word_tag] = {(tag_minus2, tag_minus): 1}
             self.num_features += 1
 
+    # Remove features that seen only one time
+    # Recount the features number
+    # Add a little safety check for "duplicate features"
     def get_frequented_features(self):
         counter = 0
         self.num_features = 0
@@ -112,25 +115,28 @@ class BasicTrainer:
             tag_to_word_dict = self.word_to_tags_dict[word]
             for tag in tag_to_word_dict:
                 if tag_to_word_dict[tag] > 1:
-                    self.features[(word, tag)] = counter
-                    counter += 1
-                    self.num_features += 1
+                    if (word, tag) not in self.features:
+                        self.features[(word, tag)] = counter
+                        counter += 1
+                        self.num_features += 1
 
         for tag in self.bigram_tag_dict:
             tag_to_tag_dict = self.bigram_tag_dict[tag]
             for tag_minus in tag_to_tag_dict:
                 if tag_to_tag_dict[tag_minus] > 1:
-                    self.features[(tag_minus, tag)] = counter
-                    counter += 1
-                    self.num_features += 1
+                    if (tag_minus, tag) not in self.features:
+                        self.features[(tag_minus, tag)] = counter
+                        counter += 1
+                        self.num_features += 1
 
         for tag in self.trigram_tag_dict:
             two_tag_to_tag_dict = self.trigram_tag_dict[tag]
             for (tag_minus2, tag_minus) in two_tag_to_tag_dict:
                 if two_tag_to_tag_dict[(tag_minus2, tag_minus)] > 1:
-                    self.features[((tag_minus2, tag_minus), tag)] = counter
-                    counter += 1
-                    self.num_features += 1
+                    if ((tag_minus2, tag_minus), tag) not in self.features:
+                        self.features[((tag_minus2, tag_minus), tag)] = counter
+                        counter += 1
+                        self.num_features += 1
 
 startTime = datetime.now()
 x = BasicTrainer()
