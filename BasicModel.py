@@ -1,5 +1,6 @@
 from datetime import datetime
 import numpy as np
+from scipy.optimize import minimize
 
 
 class BasicTrainer:
@@ -201,7 +202,8 @@ x.get_frequented_features()
 print('After optimization, only ' + str(x.num_features) + ' features left\n')
 print('Init v vector,')
 v = np.ones(shape=x.num_features, dtype=int)
-print('Calculating function L(v) for a given V vector...')
-print('The result is ' + str(x.func_l(v)))
+print('Calculating function L(v)...')
+res = minimize(x.func_l, x0=v, method='L-BFGS-B')
+print('The result is ' + str(res))
 
 print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
