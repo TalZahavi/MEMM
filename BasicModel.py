@@ -1,6 +1,6 @@
 from datetime import datetime
 import numpy as np
-from scipy.optimize import minimize
+from scipy.optimize import fmin_l_bfgs_b
 
 
 class BasicTrainer:
@@ -14,6 +14,7 @@ class BasicTrainer:
         self.trigram_tag_dict = dict()
 
         self.features = dict()
+        self.features_by_index = dict()
 
         self.calculated_features = dict()
 
@@ -121,6 +122,7 @@ class BasicTrainer:
                 if tag_to_word_dict[tag] > 1:
                     if (word, tag) not in self.features:
                         self.features[(word, tag)] = counter
+                        self.features_by_index[counter] = ((word, tag), 100)
                         counter += 1
                         self.num_features += 1
 
@@ -130,6 +132,7 @@ class BasicTrainer:
                 if tag_to_tag_dict[tag_minus] > 1:
                     if (tag_minus, tag) not in self.features:
                         self.features[(tag_minus, tag)] = counter
+                        self.features_by_index[counter] = ((tag_minus, tag), 104)
                         counter += 1
                         self.num_features += 1
 
@@ -139,6 +142,7 @@ class BasicTrainer:
                 if two_tag_to_tag_dict[(tag_minus2, tag_minus)] > 1:
                     if ((tag_minus2, tag_minus), tag) not in self.features:
                         self.features[((tag_minus2, tag_minus), tag)] = counter
+                        self.features_by_index[counter] = (((tag_minus2, tag_minus), tag), 103)
                         counter += 1
                         self.num_features += 1
 
@@ -253,10 +257,61 @@ class BasicTrainer:
         b = self.func_part2(v_vector)
         return a-b
 
+    # END TRY 2
+    ##################################################################
 
+    # Gradient
+    ##################################################################
 
+    def calculate_specific_gradient_first_sum(self, v_vector, index):
+        result = 0
+        feature_tuple = self.features_by_index[index]
 
+        for data_tuple in self.history_tag_tuples:
+            history = data_tuple[0]
+            word_tag = data_tuple[1]
+            word_index = history[3]
+            split_sentence = (history[2]).split()
+            word = split_sentence[word_index]
+            tag_minus = history[1]
+            tag_minus2 = history[0]
 
+            if feature_tuple[1] == 100:
+                feature_data = feature_tuple[0]
+                feature_word = feature_data[0]
+                feature_word_tag = feature_data[1]
+
+                if feature_word == word and feature_word_tag == word_tag:
+                    result += 1
+
+            if feature_tuple[1] == 103:
+                feature_data = feature_tuple[0]
+                feature_tag = feature_data[1]
+                tags_tuple = feature_data[0]
+                feature_tag_minus2 = tags_tuple[0]
+                feature_tag_minus = tags_tuple[1]
+
+                if feature_tag_minus2 == tag_minus2 and feature_tag_minus == tag_minus and feature_tag == word_tag:
+                    result += 1
+
+            if feature_tuple[1] == 104:
+                feature_data = feature_tuple[0]
+                feature_tag_minus = feature_data[0]
+                feature_tag = feature_data[1]
+
+                if feature_tag_minus == tag_minus and feature_tag == word_tag:
+                    result += 1
+
+        return result
+
+    def calculate_specific_gradient_second_sum(self, v_vector, index):
+        result = 0
+        return result
+
+    def calculate_specific_gradient(self, v_vector, index):
+        a = self.calculate_specific_gradient_first_sum(v_vector, index)
+        b = self.calculate_specific_gradient_second_sum(v_vector, index)
+        return a-b
 
 startTime = datetime.now()
 x = BasicTrainer()
@@ -281,11 +336,13 @@ x.calculate_all_v_dot_f_for_tuple()
 print('Done calculating all possible features!\n')
 
 
-v = np.ones(shape=x.num_features, dtype=int)
-print('Lets try to calculate L(v) for given v...')
-start_start = datetime.now()
-x.func_l_new(v)
-print('It took me ' + str(datetime.now() - start_start))
+v = np.ones(shape=x.num_features)
+# print('Calculating function L(v)...')
+# res = fmin_l_bfgs_b(x.func_l_new, x0=v_vector1, approx_grad=1)
+# print('The result is ' + str(res))
+
+print('Lets check first sum of gradient')
+print(x.calculate_specific_gradient_first_sum(v, 20))
 
 
 print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
