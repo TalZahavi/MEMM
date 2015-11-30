@@ -17,6 +17,7 @@ class BasicTrainer:
         self.num_his_per_feature = dict()
 
         self.calculated_features = dict()
+        self.tuples_per_feature = dict()  # For a given feature, which possible (history,tag) return 1
 
         self.first_sum_grad_vector = []
 
@@ -154,7 +155,7 @@ class BasicTrainer:
     # Calculation before the v_dot_f function
     # Fill a dict, that : (history_tag) -> (num features that apply for him)
     # Need to preform only once
-    def calculate_all_v_dot_f_for_tuple(self):
+    def calculate_all_dot_f_for_tuple(self):
         for data_tuple in self.history_tag_tuples:
             for word_tag in self.tags:
 
@@ -175,6 +176,12 @@ class BasicTrainer:
                     temp_arr.append(self.features[((tag_minus2, tag_minus), word_tag)])
 
                 self.calculated_features[(history, word_tag)] = temp_arr
+
+                for num_feature in temp_arr:
+                    if num_feature in self.tuples_per_feature:
+                        self.tuples_per_feature[num_feature].append((history, word_tag))
+                    else:
+                        self.tuples_per_feature[num_feature] = [(history, word_tag)]
 
     # Calculate v_dot_f for a given tuple and a vector v
     def calculate_v_dot_f_for_tuple2(self, data_tuple, v_vector):
@@ -227,6 +234,9 @@ class BasicTrainer:
     # Calculate the second sum of the gradient for a specific location
     def calculate_specific_gradient_second_sum(self, v_vector, index):
         result = 0
+
+        # Need to use self.tuples_per_feature
+
         return result
 
     # Calculate a specific location in the gradient
@@ -256,8 +266,10 @@ x.get_frequented_features()
 print('After optimization, only ' + str(x.num_features) + ' features left\n')
 
 print('Calculate features on all (history,tag) options...')
-x.calculate_all_v_dot_f_for_tuple()
+x.calculate_all_dot_f_for_tuple()
 print('Done calculating all possible features!\n')
+
+##################################################
 
 v = np.ones(shape=x.num_features)
 x.get_gradient_first_sum_vector()  # Need to calculate only one time
