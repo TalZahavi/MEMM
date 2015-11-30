@@ -225,6 +225,23 @@ class BasicTrainer:
     # Gradient
     ##################################################################
 
+    # Calculate p(y|x;v) given tuple (x,y) and vector v
+    # REMARK - The history have to be seen in the training data! do not use for viterbi!
+    def calculate_p_given_tuple(self, data_tuple, v_vector):
+        up = np.exp(self.calculate_v_dot_f_for_tuple2(data_tuple, v_vector))
+        down = 1
+
+        history = data_tuple[0]
+        features_on_tuples_array = []
+
+        for tag in self.tags:
+            features_on_tuples_array.append(self.calculate_v_dot_f_for_tuple2((history, tag), v_vector))
+
+        exp_arr = np.exp(features_on_tuples_array)
+        down = sum(exp_arr)
+
+        return up/down
+
     # Get the first sum of the gradient v
     # Need to preform only once (the function doesnt depend on v)
     def get_gradient_first_sum_vector(self):
@@ -235,7 +252,9 @@ class BasicTrainer:
     def calculate_specific_gradient_second_sum(self, v_vector, index):
         result = 0
 
-        # Need to use self.tuples_per_feature
+        tuples_for_feature = self.tuples_per_feature[index]
+        for data_tuple in tuples_for_feature:
+            result += self.calculate_p_given_tuple(data_tuple, v_vector)
 
         return result
 
@@ -249,6 +268,7 @@ class BasicTrainer:
     def get_gradient_vector(self, v_vector):
         grad_vector = np.ones(shape=self.num_features)
         for index in range(0, self.num_features):
+            # print('Start gradient at position ' + str(index))
             grad_vector[index] = self.calculate_specific_gradient(v_vector, index)
         return grad_vector
 
@@ -274,7 +294,9 @@ print('Done calculating all possible features!\n')
 v = np.ones(shape=x.num_features)
 x.get_gradient_first_sum_vector()  # Need to calculate only one time
 print('Lets try to get a gradient vector')
+gradTime = datetime.now()
 y = x.get_gradient_vector(v)
+print('Specific grad took' + str(datetime.now() - gradTime))
 
 # res = fmin_l_bfgs_b(x.func_l_new, x0=v_vector1, approx_grad=1)
 # print('The result is ' + str(res))
