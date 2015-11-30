@@ -14,7 +14,8 @@ class BasicTrainer:
         self.trigram_tag_dict = dict()
 
         self.features = dict()
-        self.features_by_index = dict()
+        # self.features_by_index = dict()
+        self.num_his_per_feature = dict()
 
         self.calculated_features = dict()
 
@@ -122,7 +123,8 @@ class BasicTrainer:
                 if tag_to_word_dict[tag] > 1:
                     if (word, tag) not in self.features:
                         self.features[(word, tag)] = counter
-                        self.features_by_index[counter] = ((word, tag), 100)
+                        # self.features_by_index[counter] = ((word, tag), 100)
+                        self.num_his_per_feature[counter] = tag_to_word_dict[tag]
                         counter += 1
                         self.num_features += 1
 
@@ -132,7 +134,8 @@ class BasicTrainer:
                 if tag_to_tag_dict[tag_minus] > 1:
                     if (tag_minus, tag) not in self.features:
                         self.features[(tag_minus, tag)] = counter
-                        self.features_by_index[counter] = ((tag_minus, tag), 104)
+                        # self.features_by_index[counter] = ((tag_minus, tag), 104)
+                        self.num_his_per_feature[counter] = tag_to_tag_dict[tag_minus]
                         counter += 1
                         self.num_features += 1
 
@@ -142,7 +145,8 @@ class BasicTrainer:
                 if two_tag_to_tag_dict[(tag_minus2, tag_minus)] > 1:
                     if ((tag_minus2, tag_minus), tag) not in self.features:
                         self.features[((tag_minus2, tag_minus), tag)] = counter
-                        self.features_by_index[counter] = (((tag_minus2, tag_minus), tag), 103)
+                        # self.features_by_index[counter] = (((tag_minus2, tag_minus), tag), 103)
+                        self.num_his_per_feature[counter] = two_tag_to_tag_dict[(tag_minus2, tag_minus)]
                         counter += 1
                         self.num_features += 1
 
@@ -268,6 +272,7 @@ class BasicTrainer:
         feature_tuple = self.features_by_index[index]
 
         for data_tuple in self.history_tag_tuples:
+
             history = data_tuple[0]
             word_tag = data_tuple[1]
             word_index = history[3]
@@ -313,6 +318,20 @@ class BasicTrainer:
         b = self.calculate_specific_gradient_second_sum(v_vector, index)
         return a-b
 
+    def get_gradient_vector(self, v_vector):
+        grad_vector = np.ones(shape=self.num_features)
+        for index in range(0, 10):
+            grad_vector[index] = self.calculate_specific_gradient(v_vector, index)
+        return grad_vector
+
+    def get_gradient_first_sum_vector(self):
+        #grad_vector = np.ones(shape=self.num_features, dtype=int)
+        grad_vector = []
+        for index in range(0, self.num_features):
+            grad_vector.append(self.num_his_per_feature[index])
+        return grad_vector
+
+
 startTime = datetime.now()
 x = BasicTrainer()
 x.get_history_tag_tuples()
@@ -341,8 +360,13 @@ v = np.ones(shape=x.num_features)
 # res = fmin_l_bfgs_b(x.func_l_new, x0=v_vector1, approx_grad=1)
 # print('The result is ' + str(res))
 
-print('Lets check first sum of gradient')
-print(x.calculate_specific_gradient_first_sum(v, 20))
+# print('Lets get gradient vector')
+# x.get_gradient_vector(v)
+
+print('Lets get the first sum vector of the gradient (need to calculate only one time)')
+grad = x.get_gradient_first_sum_vector()
+print(grad)
+
 
 
 print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
