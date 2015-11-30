@@ -17,9 +17,12 @@ class BasicTrainer:
         self.num_his_per_feature = dict()
 
         self.calculated_features = dict()
-        self.tuples_per_feature = dict()  # For a given feature, which possible (history,tag) return 1
+        self.tuples_per_feature = dict()  # For a given feature, return which possible (history,tag) return 1
 
         self.first_sum_grad_vector = []
+
+        self.temp_e_fv_specific = dict()  # For a given (history,tag), return the calc for vf(h,y)
+        self.temp_e_fv = dict()  # For a given (history), return the calc for e^(vf(h,y_tag)) [y_tag = possible tags]
 
     # Go over the training data and find all the (history,tag) tuples
     def get_history_tag_tuples(self):
@@ -201,22 +204,30 @@ class BasicTrainer:
     # Calculate the second sum of the function L(v) (for a given vector)
     def func_part2(self, v_vector):
         total_result = 0
+        self.temp_e_fv = dict()
+        self.temp_e_fv = dict()
         for data_tuple in self.history_tag_tuples:
             history = data_tuple[0]
             features_on_tuples_array = []
 
             for tag in self.tags:
-                features_on_tuples_array.append(self.calculate_v_dot_f_for_tuple2((history, tag), v_vector))
+                temp_value = self.calculate_v_dot_f_for_tuple2((history, tag), v_vector)
+                features_on_tuples_array.append(temp_value)
+                self.temp_e_fv_specific[(history, tag)] = temp_value
 
             exp_arr = np.exp(features_on_tuples_array)
-            total_result += np.log2(sum(exp_arr))
+            sum_exp_arr = sum(exp_arr)
+            self.temp_e_fv[history] = sum_exp_arr
+            total_result += np.log2(sum_exp_arr)
 
         return total_result
 
     # Calculate the function L(v) for a given vector
     def func_l_new(self, v_vector):
+        print('Start L')
         a = self.func_part1(v_vector)
         b = self.func_part2(v_vector)
+        print('Done L')
         return a-b
 
     # END FUNCTION L(V)
@@ -227,18 +238,12 @@ class BasicTrainer:
 
     # Calculate p(y|x;v) given tuple (x,y) and vector v
     # REMARK - The history have to be seen in the training data! do not use for viterbi!
+    # REMARK 2 - This will be used ONLY AFTER L(V)!! so we can use self.temp_e_fv
     def calculate_p_given_tuple(self, data_tuple, v_vector):
-        up = np.exp(self.calculate_v_dot_f_for_tuple2(data_tuple, v_vector))
-        down = 1
+        # up = np.exp(self.calculate_v_dot_f_for_tuple2(data_tuple, v_vector))
+        up = np.exp(self.temp_e_fv_specific[data_tuple])
 
-        history = data_tuple[0]
-        features_on_tuples_array = []
-
-        for tag in self.tags:
-            features_on_tuples_array.append(self.calculate_v_dot_f_for_tuple2((history, tag), v_vector))
-
-        exp_arr = np.exp(features_on_tuples_array)
-        down = sum(exp_arr)
+        down = self.temp_e_fv[data_tuple[0]]
 
         return up/down
 
@@ -267,9 +272,11 @@ class BasicTrainer:
     # Get a gradient vector for a given v
     def get_gradient_vector(self, v_vector):
         grad_vector = np.ones(shape=self.num_features)
+        print('Start Iteration')
         for index in range(0, self.num_features):
             # print('Start gradient at position ' + str(index))
             grad_vector[index] = self.calculate_specific_gradient(v_vector, index)
+        print('Done Iteration')
         return grad_vector
 
 
@@ -285,7 +292,7 @@ print('Removing unfrequented features...')
 x.get_frequented_features()
 print('After optimization, only ' + str(x.num_features) + ' features left\n')
 
-print('Calculate features on all (history,tag) options...')
+print('Calculate features on all (history,tag) options - wait about 20 seconds...')
 x.calculate_all_dot_f_for_tuple()
 print('Done calculating all possible features!\n')
 
@@ -293,13 +300,11 @@ print('Done calculating all possible features!\n')
 
 v = np.ones(shape=x.num_features)
 x.get_gradient_first_sum_vector()  # Need to calculate only one time
-print('Lets try to get a gradient vector')
-gradTime = datetime.now()
-y = x.get_gradient_vector(v)
-print('Specific grad took' + str(datetime.now() - gradTime))
+print('Lets try to optimize... may take some time...')
 
-# res = fmin_l_bfgs_b(x.func_l_new, x0=v_vector1, approx_grad=1)
-# print('The result is ' + str(res))
+
+res = fmin_l_bfgs_b(x.func_l_new, x0=v, fprime=x.get_gradient_vector)
+print('The result is ' + str(res))
 
 
 print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
