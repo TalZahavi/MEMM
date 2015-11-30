@@ -45,8 +45,8 @@
       <file leaf-file-name="BasicModel.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BasicModel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.52061856">
-              <caret line="274" column="61" selection-start-line="274" selection-start-column="61" selection-end-line="274" selection-end-column="61" />
+            <state vertical-scroll-proportion="0.580756">
+              <caret line="264" column="44" selection-start-line="264" selection-start-column="44" selection-end-line="264" selection-end-column="44" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
                 <element signature="e#1014#1156#0" expanded="false" />
@@ -59,10 +59,8 @@
                 <element signature="e#6512#7695#0" expanded="false" />
                 <element signature="e#7822#7995#0" expanded="false" />
                 <element signature="e#8113#8274#0" expanded="false" />
-                <element signature="e#10004#10130#0" expanded="false" />
                 <element signature="e#10276#10489#0" expanded="false" />
-                <element signature="e#10611#10738#0" expanded="false" />
-                <marker date="1448916956793" expanded="true" signature="12006:12039" placeholder="..." />
+                <marker date="1448921318468" expanded="true" signature="12008:12041" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -414,7 +412,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1064" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1064" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22081353" sideWeight="0.49339935" order="0" side_tool="false" content_ui="combo" />
@@ -449,7 +447,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="23" />
+      <option name="time" value="24" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -487,10 +485,8 @@
             <element signature="e#6512#7695#0" expanded="false" />
             <element signature="e#7822#7995#0" expanded="false" />
             <element signature="e#8113#8274#0" expanded="false" />
-            <element signature="e#10004#10130#0" expanded="false" />
             <element signature="e#10276#10489#0" expanded="false" />
-            <element signature="e#10611#10738#0" expanded="false" />
-            <marker date="1448916956793" expanded="true" signature="12006:12039" placeholder="..." />
+            <marker date="1448921318468" expanded="true" signature="12008:12041" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -528,10 +524,8 @@
             <element signature="e#6512#7695#0" expanded="false" />
             <element signature="e#7822#7995#0" expanded="false" />
             <element signature="e#8113#8274#0" expanded="false" />
-            <element signature="e#10004#10130#0" expanded="false" />
             <element signature="e#10276#10489#0" expanded="false" />
-            <element signature="e#10611#10738#0" expanded="false" />
-            <marker date="1448916956793" expanded="true" signature="12006:12039" placeholder="..." />
+            <marker date="1448921318468" expanded="true" signature="12008:12041" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -586,10 +580,8 @@
             <element signature="e#6512#7695#0" expanded="false" />
             <element signature="e#7822#7995#0" expanded="false" />
             <element signature="e#8113#8274#0" expanded="false" />
-            <element signature="e#10004#10130#0" expanded="false" />
             <element signature="e#10276#10489#0" expanded="false" />
-            <element signature="e#10611#10738#0" expanded="false" />
-            <marker date="1448916956793" expanded="true" signature="12006:12039" placeholder="..." />
+            <marker date="1448921318468" expanded="true" signature="12008:12041" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -627,10 +619,8 @@
             <element signature="e#6512#7695#0" expanded="false" />
             <element signature="e#7822#7995#0" expanded="false" />
             <element signature="e#8113#8274#0" expanded="false" />
-            <element signature="e#10004#10130#0" expanded="false" />
             <element signature="e#10276#10489#0" expanded="false" />
-            <element signature="e#10611#10738#0" expanded="false" />
-            <marker date="1448916956793" expanded="true" signature="12006:12039" placeholder="..." />
+            <marker date="1448921318468" expanded="true" signature="12008:12041" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -966,8 +956,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BasicModel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.52061856">
-          <caret line="274" column="61" selection-start-line="274" selection-start-column="61" selection-end-line="274" selection-end-column="61" />
+        <state vertical-scroll-proportion="0.580756">
+          <caret line="264" column="44" selection-start-line="264" selection-start-column="44" selection-end-line="264" selection-end-column="44" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
             <element signature="e#1014#1156#0" expanded="false" />
@@ -980,10 +970,8 @@
             <element signature="e#6512#7695#0" expanded="false" />
             <element signature="e#7822#7995#0" expanded="false" />
             <element signature="e#8113#8274#0" expanded="false" />
-            <element signature="e#10004#10130#0" expanded="false" />
             <element signature="e#10276#10489#0" expanded="false" />
-            <element signature="e#10611#10738#0" expanded="false" />
-            <marker date="1448916956793" expanded="true" signature="12006:12039" placeholder="..." />
+            <marker date="1448921318468" expanded="true" signature="12008:12041" placeholder="..." />
           </folding>
         </state>
       </provider>

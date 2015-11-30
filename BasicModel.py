@@ -262,7 +262,7 @@ class BasicTrainer:
 
     # Calculate a specific location in the gradient
     def calculate_specific_gradient(self, v_vector, index):
-        a = sum(self.first_sum_grad_vector)
+        a = self.first_sum_grad_vector[index]
         b = self.calculate_specific_gradient_second_sum(v_vector, index)
         return a-b
 
@@ -301,7 +301,8 @@ print('Lets try to optimize... may take some time...')
 
 
 res = fmin_l_bfgs_b(x.func_l_new, x0=v, fprime=x.get_gradient_vector)
-print('The result is ' + str(res))
+print(res[2])
+print('The optimized vector is ' + str(res[0]))
 
 
 print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
