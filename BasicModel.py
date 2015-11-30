@@ -21,8 +21,10 @@ class BasicTrainer:
 
         self.first_sum_grad_vector = []
 
-        self.temp_e_fv_specific = dict()  # For a given (history,tag), return the calc for vf(h,y)
+        self.temp_e_fv_specific = dict()  # For a given (history,tag), return the calc for e^(vf(h,y))
         self.temp_e_fv = dict()  # For a given (history), return the calc for e^(vf(h,y_tag)) [y_tag = possible tags]
+
+        self.iteration_start_time = (datetime.now(), 0)
 
     # Go over the training data and find all the (history,tag) tuples
     def get_history_tag_tuples(self):
@@ -208,26 +210,24 @@ class BasicTrainer:
         self.temp_e_fv = dict()
         for data_tuple in self.history_tag_tuples:
             history = data_tuple[0]
-            features_on_tuples_array = []
+            e_sum = 0
 
             for tag in self.tags:
                 temp_value = self.calculate_v_dot_f_for_tuple2((history, tag), v_vector)
-                features_on_tuples_array.append(temp_value)
-                self.temp_e_fv_specific[(history, tag)] = temp_value
+                temp_value_e = np.exp(temp_value)
+                e_sum += temp_value_e
+                self.temp_e_fv_specific[(history, tag)] = temp_value_e
 
-            exp_arr = np.exp(features_on_tuples_array)
-            sum_exp_arr = sum(exp_arr)
-            self.temp_e_fv[history] = sum_exp_arr
-            total_result += np.log2(sum_exp_arr)
+            self.temp_e_fv[history] = e_sum
+            total_result += np.log2(e_sum)
 
         return total_result
 
     # Calculate the function L(v) for a given vector
     def func_l_new(self, v_vector):
-        print('Start L')
+        self.iteration_start_time = (datetime.now(), self.iteration_start_time[1]+1)
         a = self.func_part1(v_vector)
         b = self.func_part2(v_vector)
-        print('Done L')
         return a-b
 
     # END FUNCTION L(V)
@@ -240,11 +240,8 @@ class BasicTrainer:
     # REMARK - The history have to be seen in the training data! do not use for viterbi!
     # REMARK 2 - This will be used ONLY AFTER L(V)!! so we can use self.temp_e_fv
     def calculate_p_given_tuple(self, data_tuple, v_vector):
-        # up = np.exp(self.calculate_v_dot_f_for_tuple2(data_tuple, v_vector))
-        up = np.exp(self.temp_e_fv_specific[data_tuple])
-
+        up = self.temp_e_fv_specific[data_tuple]
         down = self.temp_e_fv[data_tuple[0]]
-
         return up/down
 
     # Get the first sum of the gradient v
@@ -272,11 +269,11 @@ class BasicTrainer:
     # Get a gradient vector for a given v
     def get_gradient_vector(self, v_vector):
         grad_vector = np.ones(shape=self.num_features)
-        print('Start Iteration')
         for index in range(0, self.num_features):
             # print('Start gradient at position ' + str(index))
             grad_vector[index] = self.calculate_specific_gradient(v_vector, index)
-        print('Done Iteration')
+        print('The ' + str(self.iteration_start_time[1]) + ' iteration took ' +
+              str(datetime.now() - self.iteration_start_time[0]))
         return grad_vector
 
 
