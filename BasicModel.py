@@ -207,7 +207,7 @@ class BasicTrainer:
     def func_part2(self, v_vector):
         total_result = 0
         self.temp_e_fv = dict()
-        self.temp_e_fv = dict()
+        self.temp_e_fv_specific = dict()
         for data_tuple in self.history_tag_tuples:
             history = data_tuple[0]
             e_sum = 0
@@ -228,7 +228,14 @@ class BasicTrainer:
         self.iteration_start_time = (datetime.now(), self.iteration_start_time[1]+1)
         a = self.func_part1(v_vector)
         b = self.func_part2(v_vector)
-        return a-b
+        print('L Result is ' + str(-(a-b-self.lambda_calc(v_vector))))
+        return -(a-b-self.lambda_calc(v_vector))
+
+    def lambda_calc(self, v_vector):
+        result = 0
+        for i in range(0, len(v_vector)):
+            result += v[i] * v[i]
+        return 25*result
 
     # END FUNCTION L(V)
     ##################################################################
@@ -262,13 +269,13 @@ class BasicTrainer:
 
     # Calculate a specific location in the gradient
     def calculate_specific_gradient(self, v_vector, index):
-        a = self.first_sum_grad_vector[index]
+        a = self.num_his_per_feature[index]
         b = self.calculate_specific_gradient_second_sum(v_vector, index)
-        return a-b
+        return -(a-b-(50*v_vector[index]))
 
     # Get a gradient vector for a given v
     def get_gradient_vector(self, v_vector):
-        grad_vector = np.ones(shape=self.num_features)
+        grad_vector = np.zeros(shape=self.num_features)
         for index in range(0, self.num_features):
             # print('Start gradient at position ' + str(index))
             grad_vector[index] = self.calculate_specific_gradient(v_vector, index)
@@ -295,7 +302,7 @@ print('Done calculating all possible features!\n')
 
 ##################################################
 
-v = np.ones(shape=x.num_features)
+v = np.zeros(shape=x.num_features)
 x.get_gradient_first_sum_vector()  # Need to calculate only one time
 print('Lets try to optimize... may take some time...')
 
