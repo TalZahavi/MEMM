@@ -19,12 +19,13 @@ class BasicTrainer:
         self.calculated_features = dict()
         self.tuples_per_feature = dict()  # For a given feature, return which possible (history,tag) return 1
 
-        self.first_sum_grad_vector = []
-
         self.temp_e_fv_specific = dict()  # For a given (history,tag), return the calc for e^(vf(h,y))
         self.temp_e_fv = dict()  # For a given (history), return the calc for e^(vf(h,y_tag)) [y_tag = possible tags]
 
         self.iteration_start_time = (datetime.now(), 0)
+
+        self.lambda_param = 50
+        self.v_vec = np.zeros(shape=1)
 
     # Go over the training data and find all the (history,tag) tuples
     def get_history_tag_tuples(self):
@@ -228,14 +229,13 @@ class BasicTrainer:
         self.iteration_start_time = (datetime.now(), self.iteration_start_time[1]+1)
         a = self.func_part1(v_vector)
         b = self.func_part2(v_vector)
-        print('L Result is ' + str(-(a-b-self.lambda_calc(v_vector))))
         return -(a-b-self.lambda_calc(v_vector))
 
     def lambda_calc(self, v_vector):
         result = 0
         for i in range(0, len(v_vector)):
-            result += v[i] * v[i]
-        return 25*result
+            result += v_vector[i] * v_vector[i]
+        return (self.lambda_param/2)*result
 
     # END FUNCTION L(V)
     ##################################################################
@@ -251,12 +251,6 @@ class BasicTrainer:
         down = self.temp_e_fv[data_tuple[0]]
         return up/down
 
-    # Get the first sum of the gradient v
-    # Need to preform only once (the function doesnt depend on v)
-    def get_gradient_first_sum_vector(self):
-        for index in range(0, self.num_features):
-            self.first_sum_grad_vector.append(self.num_his_per_feature[index])
-
     # Calculate the second sum of the gradient for a specific location
     def calculate_specific_gradient_second_sum(self, v_vector, index):
         result = 0
@@ -271,7 +265,7 @@ class BasicTrainer:
     def calculate_specific_gradient(self, v_vector, index):
         a = self.num_his_per_feature[index]
         b = self.calculate_specific_gradient_second_sum(v_vector, index)
-        return -(a-b-(50*v_vector[index]))
+        return -(a-b-(self.lambda_param*v_vector[index]))
 
     # Get a gradient vector for a given v
     def get_gradient_vector(self, v_vector):
@@ -283,33 +277,36 @@ class BasicTrainer:
               str(datetime.now() - self.iteration_start_time[0]))
         return grad_vector
 
+    # END Gradient
+    ########################################################################
 
-startTime = datetime.now()
+    def train(self):
+        self.get_history_tag_tuples()
+        print('\nFound ' + str(len(self.history_tag_tuples)) + ' different history_tag tuples')
+        print('Found ' + str(len(self.tags)) + ' different tags\n')
+        print('Searching for all seen features in data...')
+        self.fill_features_dicts()
+        print('Done features searching. Found ' + str(self.num_features) + ' different features\n')
+        print('Removing unfrequented features...')
+        self.get_frequented_features()
+        print('After optimization, only ' + str(self.num_features) + ' features left\n')
+
+        print('Calculate features on all (history,tag) options - wait about 20 seconds...')
+        self.calculate_all_dot_f_for_tuple()
+        print('Done calculating all possible features!\n')
+
+        v_vector_temp = np.zeros(shape=self.num_features)
+        print('Lets try to find the best v... may take some time...(approximately 15 minutes)')
+
+        start = datetime.now()
+        res = fmin_l_bfgs_b(self.func_l_new, x0=v_vector_temp, fprime=self.get_gradient_vector)
+        self.v_vec = res[0]
+        print('Found the best v only in ' + str(datetime.now()-start) + '!! ITS A NEW RECORD!!!')
+
 x = BasicTrainer()
-x.get_history_tag_tuples()
-print('\nFound ' + str(len(x.history_tag_tuples)) + ' different history_tag tuples')
-print('Found ' + str(len(x.tags)) + ' different tags\n')
-print('Searching for all seen features in data...')
-x.fill_features_dicts()
-print('Done features searching. Found ' + str(x.num_features) + ' different features\n')
-print('Removing unfrequented features...')
-x.get_frequented_features()
-print('After optimization, only ' + str(x.num_features) + ' features left\n')
-
-print('Calculate features on all (history,tag) options - wait about 20 seconds...')
-x.calculate_all_dot_f_for_tuple()
-print('Done calculating all possible features!\n')
-
-##################################################
-
-v = np.zeros(shape=x.num_features)
-x.get_gradient_first_sum_vector()  # Need to calculate only one time
-print('Lets try to optimize... may take some time...')
+x.train()
 
 
-res = fmin_l_bfgs_b(x.func_l_new, x0=v, fprime=x.get_gradient_vector)
-print(res[2])
-print('The optimized vector is ' + str(res[0]))
 
 
-print('\nFROM BEGINNING TO NOW ONLY IN ' + str(datetime.now() - startTime) + ' SECONDS!')
+
