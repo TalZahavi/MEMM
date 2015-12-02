@@ -1,6 +1,5 @@
 from datetime import datetime
 import numpy as np
-import pickle
 from scipy.optimize import fmin_l_bfgs_b
 
 
@@ -306,7 +305,6 @@ class BasicTrainer:
         start = datetime.now()
         res = fmin_l_bfgs_b(self.func_l_new, x0=v_vector_temp, fprime=self.get_gradient_vector)
         self.v_vec = res[0]
-        print(res[2])
         print('Found the best v only in ' + str(datetime.now()-start) + '!! ITS A NEW RECORD!!!')
 
 x = BasicTrainer()
