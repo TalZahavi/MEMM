@@ -20,18 +20,53 @@ class MemmInference:
         else:
             return self.tags
 
-    def calculate_p(self):
-        return 0
-        # TODO: FILL IN
+    def get_num_features_for_given_tuple(self, data_tuple):
+        num_f = []
+
+        word_tag = data_tuple[1]
+        history = data_tuple[0]
+        word_index = history[3]
+        split_sentence = (history[2]).split()
+        word = split_sentence[word_index]
+        tag_minus = history[1]
+        tag_minus2 = history[0]
+
+        if (word, word_tag) in self.features:
+            num_f.append(self.features[(word, word_tag)])
+        if (tag_minus, word_tag) in self.features:
+            num_f.append(self.features[(tag_minus, word_tag)])
+        if ((tag_minus2, tag_minus), word_tag) in self.features:
+            num_f.append(self.features[((tag_minus2, tag_minus), word_tag)])
+
+        return num_f
+
+    def calculate_e_v_dot_f(self, data_tuple, v_vec):
+        num_features = self.get_num_features_for_given_tuple(data_tuple)
+        sum_temp = 0
+        for i in num_features:
+            sum_temp += v_vec[i]
+        result = np.exp(sum_temp)
+        return result
+
+    def calculate_p(self, v_vec, u, v, t, k, sentence):
+        new_tuple = ((t, u, sentence, k), v)
+
+        up = self.calculate_e_v_dot_f(new_tuple, v_vec)
+
+        sum_down = 0
+        for tag in self.tags:
+            sum_down += self.calculate_e_v_dot_f((new_tuple[0], tag), v_vec)
+
+        return up/sum_down
 
     # The main part of the viterbi algorithm
-    def get_max_pi_and_arg_max_tag(self, k, viterbi_dic, u, v):
+    def get_max_pi_and_arg_max_tag(self, k, viterbi_dic, u, v, sentence):
         max_arg_t = ''
         max_pi = 0
 
         for t in self.get_possible_tags_at_location(k-2):
             pi_val = viterbi_dic[k-1][(t, u)]
-            q_val = self.calculate_p()
+            q_val = self.calculate_p(self.v_vector, u, v, t, k, sentence)
             val = pi_val * q_val
 
             if val >= max_pi:
@@ -61,7 +96,7 @@ class MemmInference:
 
             for u in self.get_possible_tags_at_location(k-1):
                 for v in self.get_possible_tags_at_location(k):
-                    viterbi_tuple = self.get_max_pi_and_arg_max_tag(k, viterbi_dict, u, v)
+                    viterbi_tuple = self.get_max_pi_and_arg_max_tag(k, viterbi_dict, u, v, sentence)
                     temp_dict[(u, v)] = viterbi_tuple
 
             viterbi_dict[k] = temp_dict
