@@ -6,13 +6,18 @@ class MemmInference:
     def __init__(self):
         self.v_vector = np.zeros(shape=1)
         self.features = dict()  # For a given feature number, return the feature data
-        self.tags = dict()  # All possible tags
+        self.tags = set()  # All possible tags
+
+        self.e_v_dot_f = dict()
+        self.sum_e_v_dot_f = dict()
 
     # Load the data that was learned before
     def load_data(self):
         self.v_vector = np.load('opt_v.npy')
+
         self.tags = pickle.load(open("tags.p", "rb"))
         self.features = pickle.load(open("features_dict.p", "rb"))
+        # self.v_vector = np.zeros(shape=len(self.features))
 
     # Get all the possible tags at a position in the sentence
     def get_possible_tags_at_location(self, index):
@@ -42,11 +47,16 @@ class MemmInference:
         return num_f
 
     def calculate_e_v_dot_f(self, data_tuple, v_vec):
+        if data_tuple in self.e_v_dot_f:
+            return self.e_v_dot_f[data_tuple]
+
         num_features = self.get_num_features_for_given_tuple(data_tuple)
         sum_temp = 0
         for i in num_features:
             sum_temp += v_vec[i]
+
         result = np.exp(sum_temp)
+        self.e_v_dot_f[data_tuple] = result
         return result
 
     def calculate_p(self, v_vec, u, v, t, k, sentence):
@@ -54,9 +64,14 @@ class MemmInference:
 
         up = self.calculate_e_v_dot_f(new_tuple, v_vec)
 
-        sum_down = 0
-        for tag in self.tags:
-            sum_down += self.calculate_e_v_dot_f((new_tuple[0], tag), v_vec)
+        history = new_tuple[0]
+        if history in self.sum_e_v_dot_f:
+            sum_down = self.sum_e_v_dot_f[history]
+        else:
+            sum_down = 0
+            for tag in self.tags:
+                sum_down += self.calculate_e_v_dot_f((history, tag), v_vec)
+            self.sum_e_v_dot_f[history] = sum_down
 
         return up/sum_down
 
@@ -91,6 +106,8 @@ class MemmInference:
     # Using VITERBI ALGORITHM
     def sentence_inference(self, sentence):
         viterbi_dict = dict()
+        self.e_v_dot_f = dict()
+        self.sum_e_v_dot_f = dict()
         viterbi_dict[-1] = {('*', '*'): (1, '*')}
 
         len_sentence = len(sentence.split())
@@ -119,9 +136,54 @@ class MemmInference:
 
         return sentence_tags
 
+    @staticmethod
+    def get_sentence_with_tags(sentence, tags_list):
+        full_sen = []
+        split_sentence = sentence.split()
+        for i in range(0, len(split_sentence)):
+            full_sen.append(split_sentence[i] + '_' + tags_list[i])
+        return ' '.join(full_sen)
+
+    def get_acq_for_sentence_with_tags(self, sentence_with_tags):
+        num_of_words = 0
+        correct = 0
+
+        temp_arr = []
+        for word_tag in sentence_with_tags.split():
+            temp_arr.append(word_tag.split('_')[0])
+        clean_sen = ' '.join(temp_arr)
+        my_guess = self.get_sentence_with_tags(clean_sen, self.sentence_inference(clean_sen))
+
+        my_guess_arr = my_guess.split()
+        for i, word in enumerate(sentence_with_tags.split()):
+            if word == my_guess_arr[i]:
+                correct += 1
+            num_of_words += 1
+
+        return correct, num_of_words
+
+    def check_acq_for_file_with_tags(self):
+        num_sentence = 0
+        sum_correct = 0
+        total = 0
+        with open('test.wtag', 'r') as f:
+            for line in f:
+                (correct, num) = self.get_acq_for_sentence_with_tags(line)
+                sum_correct += correct
+                total += num
+
+                num_sentence += 1
+                print('Done sentence number ' + str(num_sentence))
+                print('The accuracy by now is ' + str((sum_correct/total)*100))
+        f.close()
+        print('\nThe final accuracy is ' + str((sum_correct/total)*100))
+
+
 y = MemmInference()
 y.load_data()
 start = datetime.now()
-tags = y.sentence_inference('It finished at 467.22 , down 3.45 .')
-print(tags)
-print('I found the tags for the sentence in ' + str(datetime.now()-start) + ' seconds')
+
+y.check_acq_for_file_with_tags()
+
+
+print('\nDone in ' + str(datetime.now()-start) + ' seconds')

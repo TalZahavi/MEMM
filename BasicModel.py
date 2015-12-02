@@ -26,6 +26,7 @@ class BasicTrainer:
         self.iteration_start_time = (datetime.now(), 0)
 
         self.lambda_param = 50
+        self.features_freq_param = 4
         self.v_vec = np.zeros(shape=1)
 
         self.last_l = 0
@@ -131,7 +132,7 @@ class BasicTrainer:
         for word in self.word_to_tags_dict:
             tag_to_word_dict = self.word_to_tags_dict[word]
             for tag in tag_to_word_dict:
-                if tag_to_word_dict[tag] > 1:
+                if tag_to_word_dict[tag] > self.features_freq_param:
                     if (word, tag) not in self.features:
                         self.features[(word, tag)] = counter
                         self.num_his_per_feature[counter] = tag_to_word_dict[tag]
@@ -141,7 +142,7 @@ class BasicTrainer:
         for tag in self.bigram_tag_dict:
             tag_to_tag_dict = self.bigram_tag_dict[tag]
             for tag_minus in tag_to_tag_dict:
-                if tag_to_tag_dict[tag_minus] > 1:
+                if tag_to_tag_dict[tag_minus] > self.features_freq_param:
                     if (tag_minus, tag) not in self.features:
                         self.features[(tag_minus, tag)] = counter
                         self.num_his_per_feature[counter] = tag_to_tag_dict[tag_minus]
@@ -151,7 +152,7 @@ class BasicTrainer:
         for tag in self.trigram_tag_dict:
             two_tag_to_tag_dict = self.trigram_tag_dict[tag]
             for (tag_minus2, tag_minus) in two_tag_to_tag_dict:
-                if two_tag_to_tag_dict[(tag_minus2, tag_minus)] > 1:
+                if two_tag_to_tag_dict[(tag_minus2, tag_minus)] > self.features_freq_param:
                     if ((tag_minus2, tag_minus), tag) not in self.features:
                         self.features[((tag_minus2, tag_minus), tag)] = counter
                         self.num_his_per_feature[counter] = two_tag_to_tag_dict[(tag_minus2, tag_minus)]
@@ -297,8 +298,8 @@ class BasicTrainer:
         print('After optimization, only ' + str(self.num_features) + ' features left\n')
 
         print('Let me save some data for later...')
-        pickle.dump(self.features, open("features_dict.p", "wb"))
-        pickle.dump(self.tags, open("tags.p", "wb"))
+        pickle.dump(self.features, open("features_dict.p", "wb"), protocol=2)
+        pickle.dump(self.tags, open("tags.p", "wb"), protocol=2)
         print('Done saving data\n')
 
         print('Calculate features on all (history,tag) options - wait about 20 seconds...')
