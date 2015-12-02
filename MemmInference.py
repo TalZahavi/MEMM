@@ -21,27 +21,28 @@ class MemmInference:
             return self.tags
 
     def calculate_p(self):
-        pass
+        return 0
         # TODO: FILL IN
 
     # The main part of the viterbi algorithm
-    def get_max_pi_and_arg_max_tag(self):
-        return (0,'')
-        # TODO: FILL IN!
+    def get_max_pi_and_arg_max_tag(self, k, viterbi_dic, u, v):
+        max_arg_t = ''
+        max_pi = 0
 
-        # for t in tag_group(k-2):
-        #             temp_dict_k = viterbi_dict[k-1]
-        #             temp_tuple = temp_dict_k[(t, u)]
-        #             data = ((t, u, sentence_str, k-1), v)
-        #             p_yx = x.calculate_p_y_x(data, v_vector)
-        #             #print ("prop for history= ",(t, u, sentence_str, k-1), "and tag: ", v , "is: ", p_yx)
-        #             temp_prob = temp_tuple[0] * p_yx
-        #             if max_prob <= temp_prob:
-        #                 max_prob = temp_prob
-        #                 max_tag = t
+        for t in self.get_possible_tags_at_location(k-2):
+            pi_val = viterbi_dic[k-1][(t, u)]
+            q_val = self.calculate_p()
+            val = pi_val * q_val
+
+            if val >= max_pi:
+                max_pi = val
+                max_arg_t = t
+
+        return max_pi, max_arg_t
 
     # Used for finding the last two tags in the sentence
-    def get_max_tags_tuple(self, vit_dict):
+    @staticmethod
+    def get_max_tags_tuple(vit_dict):
         max_pi = 0
         result_tuple = ('', '')
         for (u, v) in vit_dict:
@@ -60,7 +61,7 @@ class MemmInference:
 
             for u in self.get_possible_tags_at_location(k-1):
                 for v in self.get_possible_tags_at_location(k):
-                    viterbi_tuple = self.get_max_pi_and_arg_max_tag()
+                    viterbi_tuple = self.get_max_pi_and_arg_max_tag(k, viterbi_dict, u, v)
                     temp_dict[(u, v)] = viterbi_tuple
 
             viterbi_dict[k] = temp_dict
@@ -76,4 +77,6 @@ class MemmInference:
         for k in range(len(sentence)-3, 0, -1):
             (pi, bp) = viterbi_dict[k+2][(sentence_tags[k+1], sentence_tags[k+2])]
             sentence_tags[k] = bp
+
+        return sentence_tags
 
