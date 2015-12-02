@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 
 
 class MemmInference:
@@ -10,9 +11,9 @@ class MemmInference:
     # Load the data that was learned before
     def load_data(self):
         self.v_vector = np.load('opt_v.npy')
-        # TODO: Load Features Dict From Basic Model
-        # TODO: Load Tags Set From Basic Model
-
+        self.tags = pickle.load(open("tags.p", "rb"))
+        self.features = pickle.load(open("features_dict.p.p", "rb"))
+        
     # Get all the possible tags at a position in the sentence
     def get_possible_tags_at_location(self, index):
         if index < 0:

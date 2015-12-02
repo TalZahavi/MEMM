@@ -1,6 +1,7 @@
 from datetime import datetime
 import numpy as np
 from scipy.optimize import fmin_l_bfgs_b
+import pickle
 
 
 class BasicTrainer:
@@ -294,6 +295,11 @@ class BasicTrainer:
         print('Removing unfrequented features...')
         self.get_frequented_features()
         print('After optimization, only ' + str(self.num_features) + ' features left\n')
+
+        print('Let me save some data for later...')
+        pickle.dump(self.features, open("features_dict.p", "wb"))
+        pickle.dump(self.tags, open("tags.p", "wb"))
+        print('Done saving data')
 
         print('Calculate features on all (history,tag) options - wait about 20 seconds...')
         self.calculate_all_dot_f_for_tuple()
