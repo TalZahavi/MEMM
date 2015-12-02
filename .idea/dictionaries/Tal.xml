@@ -2,6 +2,7 @@
   <dictionary name="Tal">
     <words>
       <w>bigram</w>
+      <w>viterbi</w>
     </words>
   </dictionary>
 </component>
