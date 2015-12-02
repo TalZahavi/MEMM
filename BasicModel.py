@@ -1,5 +1,6 @@
 from datetime import datetime
 import numpy as np
+import pickle
 from scipy.optimize import fmin_l_bfgs_b
 
 
@@ -26,6 +27,8 @@ class BasicTrainer:
 
         self.lambda_param = 50
         self.v_vec = np.zeros(shape=1)
+
+        self.last_l = 0
 
     # Go over the training data and find all the (history,tag) tuples
     def get_history_tag_tuples(self):
@@ -220,7 +223,7 @@ class BasicTrainer:
                 self.temp_e_fv_specific[(history, tag)] = temp_value_e
 
             self.temp_e_fv[history] = e_sum
-            total_result += np.log2(e_sum)
+            total_result += np.log(e_sum)
 
         return total_result
 
@@ -229,7 +232,9 @@ class BasicTrainer:
         self.iteration_start_time = (datetime.now(), self.iteration_start_time[1]+1)
         a = self.func_part1(v_vector)
         b = self.func_part2(v_vector)
-        return -(a-b-self.lambda_calc(v_vector))
+        res = (-(a-b-self.lambda_calc(v_vector)))
+        self.last_l = res
+        return res
 
     def lambda_calc(self, v_vector):
         result = 0
@@ -301,10 +306,16 @@ class BasicTrainer:
         start = datetime.now()
         res = fmin_l_bfgs_b(self.func_l_new, x0=v_vector_temp, fprime=self.get_gradient_vector)
         self.v_vec = res[0]
+        print(res[2])
         print('Found the best v only in ' + str(datetime.now()-start) + '!! ITS A NEW RECORD!!!')
 
 x = BasicTrainer()
 x.train()
+print('The value of the function target is ' + str(x.last_l))
+print('The best v vector is saved to opt_v.npy')
+np.save('opt_v', x.v_vec)
+
+
 
 
 
