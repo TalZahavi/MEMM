@@ -31,6 +31,37 @@ class BasicTrainer:
 
         self.last_l = 0
 
+        self.freq_word_tag_dict = dict()
+        self.word_to_freq_tags_dict = dict()
+        self.num_tags = dict()
+
+    # Fill the tags count tag
+    def fill_tags_count_dict(self, tag):
+        if tag in self.num_tags:
+            self.num_tags[tag] += 1
+        else:
+            self.num_tags[tag] = 1
+
+    # Count the number of tags for each word
+    def fill_freq_tags_dict(self, word, tag):
+        if word in self.freq_word_tag_dict:
+            tags_dict = self.freq_word_tag_dict[word]
+
+            if tag in tags_dict:
+                tags_dict[tag] += 1
+            else:
+                tags_dict[tag] = 1
+        else:
+            self.freq_word_tag_dict[word] = {tag: 1}
+
+    # Save the (word)->(tag) for tags that appear more then "x" times for a specific word
+    def find_freq_tags(self):
+        for word in self.freq_word_tag_dict:
+            for tag in self.freq_word_tag_dict[word]:
+                if self.freq_word_tag_dict[word][tag] > 7:
+                    self.word_to_freq_tags_dict[word] = tag
+
+
     # Go over the training data and find all the (history,tag) tuples
     def get_history_tag_tuples(self):
         with open('train.wtag', 'r') as f:
@@ -47,6 +78,9 @@ class BasicTrainer:
             split_word = word.split('_')
             sentence_words.append(split_word[0])
             sentence_tags.append(split_word[1])
+
+            self.fill_freq_tags_dict(split_word[0], split_word[1])
+            self.fill_tags_count_dict(split_word[1])
 
         clean_sentence = ' '.join(sentence_words)
 
@@ -290,6 +324,9 @@ class BasicTrainer:
         self.get_history_tag_tuples()
         print('\nFound ' + str(len(self.history_tag_tuples)) + ' different history_tag tuples')
         print('Found ' + str(len(self.tags)) + ' different tags\n')
+
+        self.find_freq_tags()
+
         print('Searching for all seen features in data...')
         self.fill_features_dicts()
         print('Done features searching. Found ' + str(self.num_features) + ' different features\n')
@@ -300,6 +337,7 @@ class BasicTrainer:
         print('Let me save some data for later...')
         pickle.dump(self.features, open("features_dict.p", "wb"), protocol=2)
         pickle.dump(self.tags, open("tags.p", "wb"), protocol=2)
+        pickle.dump(self.word_to_freq_tags_dict, open("freq_tags.p", "wb"), protocol=2)
         print('Done saving data\n')
 
         print('Calculate features on all (history,tag) options - wait about 20 seconds...')

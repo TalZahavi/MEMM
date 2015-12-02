@@ -11,19 +11,28 @@ class MemmInference:
         self.e_v_dot_f = dict()
         self.sum_e_v_dot_f = dict()
 
+        self.freq_tags = dict()
+
     # Load the data that was learned before
     def load_data(self):
-        self.v_vector = np.load('opt_v.npy')
+        # self.v_vector = np.load('opt_v.npy')
 
         self.tags = pickle.load(open("tags.p", "rb"))
         self.features = pickle.load(open("features_dict.p", "rb"))
-        # self.v_vector = np.zeros(shape=len(self.features))
+        self.freq_tags = pickle.load(open("freq_tags.p", "rb"))
+        self.v_vector = np.zeros(shape=len(self.features))
 
     # Get all the possible tags at a position in the sentence
-    def get_possible_tags_at_location(self, index):
+    def get_possible_tags_at_location(self, index, word):
         if index < 0:
             return ['*']
         else:
+            if word in self.freq_tags:
+                return [self.freq_tags[word]]
+            if word == '.':
+                return ['.']
+            if word == ',':
+                return [',']
             return self.tags
 
     def get_num_features_for_given_tuple(self, data_tuple):
@@ -80,7 +89,13 @@ class MemmInference:
         max_arg_t = ''
         max_pi = 0
 
-        for t in self.get_possible_tags_at_location(k-2):
+        sen_split = sentence.split()
+        if k == 0 or k == 1:
+            w_i = ''
+        else:
+            w_i = sen_split[k-2]
+
+        for t in self.get_possible_tags_at_location(k-2, w_i):
             pi_val = (viterbi_dic[k-1])[(t, u)][0]
             q_val = self.calculate_p(self.v_vector, u, v, t, k, sentence)
 
@@ -110,13 +125,19 @@ class MemmInference:
         self.sum_e_v_dot_f = dict()
         viterbi_dict[-1] = {('*', '*'): (1, '*')}
 
+        split_s = sentence.split()
         len_sentence = len(sentence.split())
 
         for k in range(0, len_sentence):
             temp_dict = dict()  # (u,v) -> (pi,bp)
 
-            for u in self.get_possible_tags_at_location(k-1):
-                for v in self.get_possible_tags_at_location(k):
+            if k == 0:
+                w_i = ''
+            else:
+                w_i = split_s[k-1]
+
+            for u in self.get_possible_tags_at_location(k-1, w_i):
+                for v in self.get_possible_tags_at_location(k, split_s[k]):
                     viterbi_tuple = self.get_max_pi_and_arg_max_tag(k, viterbi_dict, u, v, sentence)
                     temp_dict[(u, v)] = viterbi_tuple
 
@@ -186,4 +207,4 @@ start = datetime.now()
 y.check_acq_for_file_with_tags()
 
 
-print('\nDone in ' + str(datetime.now()-start) + ' seconds')
+print('\nDone in ' + str(datetime.now()-start))
