@@ -1,10 +1,10 @@
 import numpy as np
 import pickle
-
+from datetime import datetime
 
 class MemmInference:
     def __init__(self):
-        self.v_vector = np.ones(shape=1)
+        self.v_vector = np.zeros(shape=1)
         self.features = dict()  # For a given feature number, return the feature data
         self.tags = dict()  # All possible tags
 
@@ -12,8 +12,8 @@ class MemmInference:
     def load_data(self):
         self.v_vector = np.load('opt_v.npy')
         self.tags = pickle.load(open("tags.p", "rb"))
-        self.features = pickle.load(open("features_dict.p.p", "rb"))
-        
+        self.features = pickle.load(open("features_dict.p", "rb"))
+
     # Get all the possible tags at a position in the sentence
     def get_possible_tags_at_location(self, index):
         if index < 0:
@@ -66,11 +66,12 @@ class MemmInference:
         max_pi = 0
 
         for t in self.get_possible_tags_at_location(k-2):
-            pi_val = viterbi_dic[k-1][(t, u)]
+            pi_val = (viterbi_dic[k-1])[(t, u)][0]
             q_val = self.calculate_p(self.v_vector, u, v, t, k, sentence)
-            val = pi_val * q_val
 
-            if val >= max_pi:
+            val = pi_val*q_val
+
+            if val > max_pi:
                 max_pi = val
                 max_arg_t = t
 
@@ -82,17 +83,19 @@ class MemmInference:
         max_pi = 0
         result_tuple = ('', '')
         for (u, v) in vit_dict:
-            if vit_dict[(u, v)][0] >= max_pi:
+            if vit_dict[(u, v)][0] > max_pi:
                 max_pi = vit_dict[(u, v)][0]
                 result_tuple = (u, v)
         return result_tuple
 
     # Using VITERBI ALGORITHM
-    def sentence_inference(self, sentence, v_vec):
+    def sentence_inference(self, sentence):
         viterbi_dict = dict()
         viterbi_dict[-1] = {('*', '*'): (1, '*')}
 
-        for k in range(0, len(sentence)):
+        len_sentence = len(sentence.split())
+
+        for k in range(0, len_sentence):
             temp_dict = dict()  # (u,v) -> (pi,bp)
 
             for u in self.get_possible_tags_at_location(k-1):
@@ -102,17 +105,23 @@ class MemmInference:
 
             viterbi_dict[k] = temp_dict
 
-        sentence_tags = []
+        sentence_tags = dict()
 
         # Finding t_n-1 t_n tags
-        tags_tuple = self.get_max_tags_tuple(viterbi_dict[len(sentence)-1])
-        sentence_tags[len(sentence)-1] = tags_tuple[1]
-        sentence_tags[len(sentence)-2] = tags_tuple[0]
+        tags_tuple = self.get_max_tags_tuple(viterbi_dict[len_sentence-1])
+        sentence_tags[len_sentence-1] = tags_tuple[1]
+        sentence_tags[len_sentence-2] = tags_tuple[0]
 
         # Finding the rest of the tags
-        for k in range(len(sentence)-3, 0, -1):
+        for k in range(len_sentence-3, -1, -1):
             (pi, bp) = viterbi_dict[k+2][(sentence_tags[k+1], sentence_tags[k+2])]
             sentence_tags[k] = bp
 
         return sentence_tags
 
+y = MemmInference()
+y.load_data()
+start = datetime.now()
+tags = y.sentence_inference('It finished at 467.22 , down 3.45 .')
+print(tags)
+print('I found the tags for the sentence in ' + str(datetime.now()-start) + ' seconds')
