@@ -26,7 +26,7 @@ class BasicTrainer:
         self.iteration_start_time = (datetime.now(), 0)
 
         self.lambda_param = 50
-        self.features_freq_param = 4
+        self.features_freq_param = 2
         self.v_vec = np.zeros(shape=1)
 
         self.last_l = 0
