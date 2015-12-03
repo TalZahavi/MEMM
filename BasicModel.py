@@ -56,10 +56,15 @@ class BasicTrainer:
 
     # Save the (word)->(tag) for tags that appear more then "x" times for a specific word
     def find_freq_tags(self):
+        # for word in self.freq_word_tag_dict:
+        #     for tag in self.freq_word_tag_dict[word]:
+        #         if self.freq_word_tag_dict[word][tag] > 7:
+        #             self.word_to_freq_tags_dict[word] = [tag]
         for word in self.freq_word_tag_dict:
+            self.word_to_freq_tags_dict[word] = []
             for tag in self.freq_word_tag_dict[word]:
-                if self.freq_word_tag_dict[word][tag] > 7:
-                    self.word_to_freq_tags_dict[word] = tag
+                self.word_to_freq_tags_dict[word].append(tag)
+
 
 
     # Go over the training data and find all the (history,tag) tuples
