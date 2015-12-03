@@ -2,6 +2,7 @@ import numpy as np
 import pickle
 from datetime import datetime
 
+
 class MemmInference:
     def __init__(self):
         self.v_vector = np.zeros(shape=1)
@@ -15,10 +16,10 @@ class MemmInference:
 
     # Load the data that was learned before
     def load_data(self):
-        self.v_vector = np.load('opt_v.npy')
-        self.tags = pickle.load(open("tags.p", "rb"))
-        self.features = pickle.load(open("features_dict.p", "rb"))
-        self.freq_tags = pickle.load(open("freq_tags.p", "rb"))
+        self.v_vector = np.load('basic_opt_v.npy')
+        self.tags = pickle.load(open("basic_tags.p", "rb"))
+        self.features = pickle.load(open("basic_features_dict.p", "rb"))
+        self.freq_tags = pickle.load(open("basic_freq_tags.p", "rb"))
 
     # Get all the possible tags at a position in the sentence
     def get_possible_tags_at_location(self, index, word):
@@ -151,6 +152,7 @@ class MemmInference:
 
         return sentence_tags
 
+    # Return a sentence with given tags
     @staticmethod
     def get_sentence_with_tags(sentence, tags_list):
         full_sen = []
@@ -159,6 +161,7 @@ class MemmInference:
             full_sen.append(split_sentence[i] + '_' + tags_list[i])
         return ' '.join(full_sen)
 
+    # Return the (correct, num of words) of a given sentence with tags
     def get_acq_for_sentence_with_tags(self, sentence_with_tags):
         num_of_words = 0
         correct = 0
@@ -177,6 +180,7 @@ class MemmInference:
 
         return correct, num_of_words
 
+    # Go over the "test" (sentences with tags) and write the accuracy)
     def check_acq_for_file_with_tags(self):
         num_sentence = 0
         sum_correct = 0
@@ -189,9 +193,9 @@ class MemmInference:
 
                 num_sentence += 1
                 print('Done sentence number ' + str(num_sentence))
-                print('The accuracy by now is ' + str((sum_correct/total)*100))
+                print('The accuracy by now is ' + str(round((sum_correct/total)*100, 2)) + '%')
         f.close()
-        print('\nThe final accuracy is ' + str((sum_correct/total)*100))
+        print('\nThe final accuracy is ' + str(round((sum_correct/total)*100, 2)) + '%')
 
 
 y = MemmInference()
