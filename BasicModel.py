@@ -26,21 +26,12 @@ class BasicTrainer:
         self.iteration_start_time = (datetime.now(), 0)
 
         self.lambda_param = 50
-        self.features_freq_param = 2
         self.v_vec = np.zeros(shape=1)
 
         self.last_l = 0
 
         self.freq_word_tag_dict = dict()
         self.word_to_freq_tags_dict = dict()
-        self.num_tags = dict()
-
-    # Fill the tags count tag
-    def fill_tags_count_dict(self, tag):
-        if tag in self.num_tags:
-            self.num_tags[tag] += 1
-        else:
-            self.num_tags[tag] = 1
 
     # Count the number of tags for each word
     def fill_freq_tags_dict(self, word, tag):
@@ -65,8 +56,6 @@ class BasicTrainer:
             for tag in self.freq_word_tag_dict[word]:
                 self.word_to_freq_tags_dict[word].append(tag)
 
-
-
     # Go over the training data and find all the (history,tag) tuples
     def get_history_tag_tuples(self):
         with open('train.wtag', 'r') as f:
@@ -85,7 +74,6 @@ class BasicTrainer:
             sentence_tags.append(split_word[1])
 
             self.fill_freq_tags_dict(split_word[0], split_word[1])
-            self.fill_tags_count_dict(split_word[1])
 
         clean_sentence = ' '.join(sentence_words)
 
@@ -171,7 +159,7 @@ class BasicTrainer:
         for word in self.word_to_tags_dict:
             tag_to_word_dict = self.word_to_tags_dict[word]
             for tag in tag_to_word_dict:
-                if tag_to_word_dict[tag] > self.features_freq_param:
+                if tag_to_word_dict[tag] > 1:
                     if (word, tag) not in self.features:
                         self.features[(word, tag)] = counter
                         self.num_his_per_feature[counter] = tag_to_word_dict[tag]
@@ -181,7 +169,7 @@ class BasicTrainer:
         for tag in self.bigram_tag_dict:
             tag_to_tag_dict = self.bigram_tag_dict[tag]
             for tag_minus in tag_to_tag_dict:
-                if tag_to_tag_dict[tag_minus] > self.features_freq_param:
+                if tag_to_tag_dict[tag_minus] > 3:
                     if (tag_minus, tag) not in self.features:
                         self.features[(tag_minus, tag)] = counter
                         self.num_his_per_feature[counter] = tag_to_tag_dict[tag_minus]
@@ -191,7 +179,7 @@ class BasicTrainer:
         for tag in self.trigram_tag_dict:
             two_tag_to_tag_dict = self.trigram_tag_dict[tag]
             for (tag_minus2, tag_minus) in two_tag_to_tag_dict:
-                if two_tag_to_tag_dict[(tag_minus2, tag_minus)] > self.features_freq_param:
+                if two_tag_to_tag_dict[(tag_minus2, tag_minus)] > 2:
                     if ((tag_minus2, tag_minus), tag) not in self.features:
                         self.features[((tag_minus2, tag_minus), tag)] = counter
                         self.num_his_per_feature[counter] = two_tag_to_tag_dict[(tag_minus2, tag_minus)]
@@ -350,18 +338,19 @@ class BasicTrainer:
         print('Done calculating all possible features!\n')
 
         v_vector_temp = np.zeros(shape=self.num_features)
-        print('Lets try to find the best v... may take some time...(approximately 15 minutes)')
+        print('Lets try to find the best v... may take some time...(approximately 18 minutes)')
 
         start = datetime.now()
         res = fmin_l_bfgs_b(self.func_l_new, x0=v_vector_temp, fprime=self.get_gradient_vector)
         self.v_vec = res[0]
         print('Found the best v only in ' + str(datetime.now()-start) + '!! ITS A NEW RECORD!!!')
 
+        print('\nSaving the best v to opt_v.npy...')
+        np.save('opt_v', self.v_vec)
+        print('ALL DONE!')
+
 x = BasicTrainer()
 x.train()
-print('The value of the function target is ' + str(x.last_l))
-print('The best v vector is saved to opt_v.npy')
-np.save('opt_v', x.v_vec)
 
 
 

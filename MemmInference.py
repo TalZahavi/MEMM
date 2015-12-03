@@ -16,11 +16,9 @@ class MemmInference:
     # Load the data that was learned before
     def load_data(self):
         self.v_vector = np.load('opt_v.npy')
-
         self.tags = pickle.load(open("tags.p", "rb"))
         self.features = pickle.load(open("features_dict.p", "rb"))
         self.freq_tags = pickle.load(open("freq_tags.p", "rb"))
-        # self.v_vector = np.zeros(shape=len(self.features))
 
     # Get all the possible tags at a position in the sentence
     def get_possible_tags_at_location(self, index, word):
@@ -29,7 +27,7 @@ class MemmInference:
         else:
             if word in self.freq_tags:
                 return self.freq_tags[word]
-            return ['NNP', 'JJ', 'CD', 'NNS', 'DT', 'NN', 'IN']
+            return ['NNP', 'JJ', 'CD', 'NNS', 'DT', 'NN', 'IN', 'TO', 'VBD', 'VB', 'VBN', 'VBG', 'CC']
 
     def get_num_features_for_given_tuple(self, data_tuple):
         num_f = []
