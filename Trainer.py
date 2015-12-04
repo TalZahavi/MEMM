@@ -2,6 +2,7 @@ from datetime import datetime
 import numpy as np
 from scipy.optimize import fmin_l_bfgs_b
 from BASIC import BasicModelFeatures
+from Improved import ImprovedModelFeature
 
 
 class Trainer:
@@ -32,6 +33,8 @@ class Trainer:
 
         self.freq_word_tag_dict = dict()
         self.word_to_freq_tags_dict = dict()
+
+        self.improved_mode = False
 
     # Count the number of tags for each word
     def fill_freq_tags_dict(self, word, tag):
@@ -93,13 +96,19 @@ class Trainer:
 
     # Fill the features dicts according to the seen data
     def fill_features_dicts(self):
-        BasicModelFeatures.fill_features_dicts(self)
+        if self.improved_mode:
+            ImprovedModelFeature.fill_features_dicts(self)
+        else:
+            BasicModelFeatures.fill_features_dicts(self)
 
     # Remove features that seen only one time
     # Recount the features number
     # Add a little safety check for "duplicate features"
     def get_frequented_features(self):
-        BasicModelFeatures.get_frequented_features(self)
+        if self.improved_mode:
+            ImprovedModelFeature.get_frequented_features(self)
+        else:
+            BasicModelFeatures.get_frequented_features(self)
 
     # FUNCTION L(V)
     ################################################################
@@ -108,7 +117,10 @@ class Trainer:
     # Fill a dict, that : (history_tag) -> (num features that apply for him)
     # Need to preform only once
     def calculate_all_dot_f_for_tuple(self):
-        BasicModelFeatures.calculate_all_dot_f_for_tuple(self)
+        if self.improved_mode:
+            ImprovedModelFeature.calculate_all_dot_f_for_tuple(self)
+        else:
+            BasicModelFeatures.calculate_all_dot_f_for_tuple(self)
 
     # Calculate v_dot_f for a given tuple and a vector v
     def calculate_v_dot_f_for_tuple2(self, data_tuple, v_vector):
@@ -203,7 +215,18 @@ class Trainer:
     # END Gradient
     ########################################################################
 
-    def train(self):
+    def train(self, improved_mode):
+
+        if improved_mode == 'Improved':
+            self.improved_mode = True
+            print('\nStarted IMPROVED mode training')
+        elif improved_mode == 'Basic':
+            self.improved_mode = False
+            print('\nStarted BASIC mode training')
+        else:
+            print('You need to choose improved or basic mode!')
+            return
+
         self.get_history_tag_tuples()
         print('\nFound ' + str(len(self.history_tag_tuples)) + ' different history_tag tuples')
         print('Found ' + str(len(self.tags)) + ' different tags\n')
@@ -230,11 +253,14 @@ class Trainer:
         print('Found the best v only in ' + str(datetime.now()-start) + '!! ITS A NEW RECORD!!!')
 
         print('\nSaving the data...')
-        BasicModelFeatures.save_data_to_files(self)
+        if self.improved_mode:
+            ImprovedModelFeature.save_data_to_files(self)
+        else:
+            BasicModelFeatures.save_data_to_files(self)
         print('ALL DONE!')
 
 x = Trainer()
-x.train()
+x.train('Improved')
 
 
 

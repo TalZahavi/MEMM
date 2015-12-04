@@ -1,6 +1,10 @@
+import pickle
+import numpy as np
+
+
 feature_105_dict = dict()
-feature_101_dict = dict()
-feature_102_dict = dict()
+feature_101_dict = dict()  # Ends with 'ing', and tag is 'VBG'
+feature_102_dict = dict()  # Starts with 'pre', and the is 'NN'
 
 
 # Auxiliary function - check if a given word ends with the given suffix (num_char is the length of the suffix)
@@ -174,7 +178,7 @@ def get_frequented_features(self):
                 self.num_features += 1
 
     for word in feature_101_dict:
-        if feature_101_dict[word] > 3:
+        if feature_101_dict[word] > 1:
             if (word, 'ing') not in self.features:
                 self.features[(word, 'ing')] = counter
                 self.num_his_per_feature[counter] = feature_101_dict[word]
@@ -188,5 +192,51 @@ def get_frequented_features(self):
                 self.num_his_per_feature[counter] = feature_102_dict[word]
                 counter += 1
                 self.num_features += 1
+
+
+# Calculation before the v_dot_f function
+# Fill a dict, that : (history_tag) -> (num features that apply for him)
+# Need to preform only once
+def calculate_all_dot_f_for_tuple(self):
+    for data_tuple in self.history_tag_tuples:
+        for word_tag in self.tags:
+
+            temp_arr = []
+
+            history = data_tuple[0]
+            word_index = history[3]
+            split_sentence = (history[2]).split()
+            word = split_sentence[word_index]
+            tag_minus = history[1]
+            tag_minus2 = history[0]
+
+            if (word, word_tag) in self.features:
+                temp_arr.append(self.features[(word, word_tag)])
+            if (tag_minus, word_tag) in self.features:
+                temp_arr.append(self.features[(tag_minus, word_tag)])
+            if ((tag_minus2, tag_minus), word_tag) in self.features:
+                temp_arr.append(self.features[((tag_minus2, tag_minus), word_tag)])
+
+            if (word_tag, word_tag) in self.features:
+                temp_arr.append(self.features[(word_tag, word_tag)])
+            if (word, 'ing') in self.features:
+                temp_arr.append(self.features[(word, 'ing')])
+            if (word, 'pre') in self.features:
+                temp_arr.append(self.features[(word, 'pre')])
+
+            self.calculated_features[(history, word_tag)] = temp_arr
+
+            for num_feature in temp_arr:
+                if num_feature in self.tuples_per_feature:
+                    self.tuples_per_feature[num_feature].append((history, word_tag))
+                else:
+                    self.tuples_per_feature[num_feature] = [(history, word_tag)]
+
+
+def save_data_to_files(self):
+    pickle.dump(self.features, open("improved_features_dict.p", "wb"), protocol=2)
+    pickle.dump(self.tags, open("improved_tags.p", "wb"), protocol=2)
+    pickle.dump(self.word_to_freq_tags_dict, open("improved_freq_tags.p", "wb"), protocol=2)
+    np.save('improved_opt_v', self.v_vec)
 
 
