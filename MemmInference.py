@@ -64,8 +64,8 @@ class MemmInference:
         else:
             if word in self.freq_tags:
                 return self.freq_tags[word]
-            return ['NNP', 'JJ', 'CD', 'NNS', 'DT', 'NN', 'IN', 'TO', 'VBD', 'VB', 'VBN', 'VBG', 'CC']
-            # return self.tags
+            # return ['NNP', 'JJ', 'CD', 'NNS', 'DT', 'NN', 'IN', 'TO', 'VBD', 'VB', 'VBN', 'VBG', 'CC']
+            return self.tags
 
     def get_num_features_for_given_tuple(self, data_tuple):
         num_f = []
