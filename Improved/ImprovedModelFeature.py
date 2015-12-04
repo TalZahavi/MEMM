@@ -5,6 +5,7 @@ import numpy as np
 feature_105_dict = dict()
 feature_101_dict = dict()  # Ends with 'ing', and tag is 'VBG'
 feature_102_dict = dict()  # Starts with 'pre', and the is 'NN'
+feature_number_dict = dict()  # Check if the word represent a number, and the tag is CD
 
 
 # Auxiliary function - check if a given word ends with the given suffix (num_char is the length of the suffix)
@@ -33,6 +34,21 @@ def check_prefix(word, num_char, prefix):
     return True
 
 
+# Auxiliary function - check if a given word represent a number
+def check_number(word):
+    nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    found_one_digit = False
+    for c in list(word):
+        if c in nums:
+            found_one_digit = True
+    if not found_one_digit:
+        return False
+    for c in list(word):
+        if c != '.' and c != ',' and c not in nums:
+            return False
+    return True
+
+
 # Fill the features dicts according to the seen data
 def fill_features_dicts(self):
     for (history, word_tag) in self.history_tag_tuples:
@@ -50,6 +66,15 @@ def fill_features_dicts(self):
             add_suffix_ing_to_dict()
         if check_prefix(word, 3, 'pre') and word_tag == 'NN':
             add_prefix_pre_to_dict()
+        if check_number(word) and word_tag == 'CD':
+            add_number_to_dict()
+
+
+def add_number_to_dict():
+    if 'number' in feature_number_dict:
+        feature_number_dict['number'] += 1
+    else:
+        feature_number_dict['number'] = 1
 
 
 # Fill the 101 feature with the number of times the feature seen
@@ -181,6 +206,10 @@ def get_frequented_features(self):
     self.num_his_per_feature[counter] = feature_102_dict['pre']
     counter += 1
     self.num_features += 1
+    self.features[('number', 'number')] = counter
+    self.num_his_per_feature[counter] = feature_number_dict['number']
+    counter += 1
+    self.num_features += 1
 
 
 # Calculation before the v_dot_f function
@@ -212,6 +241,8 @@ def calculate_all_dot_f_for_tuple(self):
                 temp_arr.append(self.features[('ing', 'ing')])
             if check_prefix(word, 3, 'pre') and word_tag == 'NN':
                 temp_arr.append(self.features[('pre', 'pre')])
+            if check_number(word) and word_tag == 'CD':
+                temp_arr.append(self.features[('number', 'number')])
 
             self.calculated_features[(history, word_tag)] = temp_arr
 

@@ -27,7 +27,6 @@ class MemmInference:
             suffix_index -= 1
         return True
 
-
     # Auxiliary function - check if a given word starts with the given prefix (num_char is the length of the prefix)
     @staticmethod
     def check_prefix(word, num_char, prefix):
@@ -39,6 +38,21 @@ class MemmInference:
             if word_chars[i] != prefix[prefix_index]:
                 return False
             prefix_index += 1
+        return True
+
+    # Auxiliary function - check if a given word represent a number
+    @staticmethod
+    def check_number(word):
+        nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        found_one_digit = False
+        for c in list(word):
+            if c in nums:
+                found_one_digit = True
+        if not found_one_digit:
+            return False
+        for c in list(word):
+            if c != '.' and c != ',' and c not in nums:
+                return False
         return True
 
     # Load the data that was learned before
@@ -83,6 +97,8 @@ class MemmInference:
             num_f.append(self.features[('ing', 'ing')])
         if self.check_prefix(word, 3, 'pre') and word_tag == 'NN':
             num_f.append(self.features[('pre', 'pre')])
+        if self.check_number(word) and word_tag == 'CD':
+            num_f.append(self.features['number', 'number'])
 
         return num_f
 
