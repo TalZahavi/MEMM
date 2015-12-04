@@ -27,8 +27,6 @@ def check_prefix(word, num_char, prefix):
     word_chars = list(word)
     prefix_index = 0
     for i in range(0, num_char):
-        print('checking ' + word_chars[i])
-        print('with ' + prefix[prefix_index])
         if word_chars[i] != prefix[prefix_index]:
             return False
         prefix_index += 1
@@ -49,27 +47,25 @@ def fill_features_dicts(self):
         add_trigram_tag_to_dict(self, tag_minus2, tag_minus, word_tag)
 
         if check_suffix(word, 3, 'ing') and word_tag == 'VBG':
-            add_suffix_ing_to_dict(word)
+            add_suffix_ing_to_dict()
         if check_prefix(word, 3, 'pre') and word_tag == 'NN':
-            add_prefix_pre_to_dict(word)
+            add_prefix_pre_to_dict()
 
 
-# Fill the 101 feature with a new seen feature
-# If already saw the feature, update the counter
-def add_suffix_ing_to_dict(word):
-    if word in feature_101_dict:
-        feature_101_dict[word] += 1
+# Fill the 101 feature with the number of times the feature seen
+def add_suffix_ing_to_dict():
+    if 'ing' in feature_101_dict:
+        feature_101_dict['ing'] += 1
     else:
-        feature_101_dict[word] = 1
+        feature_101_dict['ing'] = 1
 
 
-# Fill the 102 feature with a new seen feature
-# If already saw the feature, update the counter
-def add_prefix_pre_to_dict(word):
-    if word in feature_102_dict:
-        feature_102_dict[word] += 1
+# Fill the 102 feature with the number of times the feature seen
+def add_prefix_pre_to_dict():
+    if 'pre' in feature_102_dict:
+        feature_102_dict['pre'] += 1
     else:
-        feature_102_dict[word] = 1
+        feature_102_dict['pre'] = 1
 
 
 # Fill the 105 feature with a new seen feature
@@ -169,29 +165,22 @@ def get_frequented_features(self):
                     counter += 1
                     self.num_features += 1
 
-    for tag in feature_105_dict:
-        if feature_105_dict[tag] > 7:
-            if (tag, tag) not in self.features:
-                self.features[(tag, tag)] = counter
-                self.num_his_per_feature[counter] = feature_105_dict[tag]
-                counter += 1
-                self.num_features += 1
+    # for tag in feature_105_dict:
+    #     if feature_105_dict[tag] > 20:
+    #         if (tag, tag) not in self.features:
+    #             self.features[(tag, tag)] = counter
+    #             self.num_his_per_feature[counter] = feature_105_dict[tag]
+    #             counter += 1
+    #             self.num_features += 1
 
-    for word in feature_101_dict:
-        if feature_101_dict[word] > 1:
-            if (word, 'ing') not in self.features:
-                self.features[(word, 'ing')] = counter
-                self.num_his_per_feature[counter] = feature_101_dict[word]
-                counter += 1
-                self.num_features += 1
-
-    for word in feature_102_dict:
-        if feature_102_dict[word] > 3:
-            if (word, 'pre') not in self.features:
-                self.features[(word, 'pre')] = counter
-                self.num_his_per_feature[counter] = feature_102_dict[word]
-                counter += 1
-                self.num_features += 1
+    self.features[('ing', 'ing')] = counter
+    self.num_his_per_feature[counter] = feature_101_dict['ing']
+    counter += 1
+    self.num_features += 1
+    self.features[('pre', 'pre')] = counter
+    self.num_his_per_feature[counter] = feature_102_dict['pre']
+    counter += 1
+    self.num_features += 1
 
 
 # Calculation before the v_dot_f function
@@ -217,12 +206,12 @@ def calculate_all_dot_f_for_tuple(self):
             if ((tag_minus2, tag_minus), word_tag) in self.features:
                 temp_arr.append(self.features[((tag_minus2, tag_minus), word_tag)])
 
-            if (word_tag, word_tag) in self.features:
-                temp_arr.append(self.features[(word_tag, word_tag)])
-            if (word, 'ing') in self.features:
-                temp_arr.append(self.features[(word, 'ing')])
-            if (word, 'pre') in self.features:
-                temp_arr.append(self.features[(word, 'pre')])
+            # if (word_tag, word_tag) in self.features:
+            #     temp_arr.append(self.features[(word_tag, word_tag)])
+            if check_suffix(word, 3, 'ing') and word_tag == 'VBG':
+                temp_arr.append(self.features[('ing', 'ing')])
+            if check_prefix(word, 3, 'pre') and word_tag == 'NN':
+                temp_arr.append(self.features[('pre', 'pre')])
 
             self.calculated_features[(history, word_tag)] = temp_arr
 

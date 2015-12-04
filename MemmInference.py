@@ -14,12 +14,39 @@ class MemmInference:
 
         self.freq_tags = dict()
 
+    # Auxiliary function - check if a given word ends with the given suffix (num_char is the length of the suffix)
+    @staticmethod
+    def check_suffix(word, num_char, suffix):
+        if word == '':
+            return False
+        word_chars = list(word)
+        suffix_index = num_char
+        for i in range(len(word)-1, len(word)-num_char-1, -1):
+            if word_chars[i] != suffix[suffix_index-1]:
+                return False
+            suffix_index -= 1
+        return True
+
+
+    # Auxiliary function - check if a given word starts with the given prefix (num_char is the length of the prefix)
+    @staticmethod
+    def check_prefix(word, num_char, prefix):
+        if word == '':
+            return False
+        word_chars = list(word)
+        prefix_index = 0
+        for i in range(0, num_char):
+            if word_chars[i] != prefix[prefix_index]:
+                return False
+            prefix_index += 1
+        return True
+
     # Load the data that was learned before
     def load_data(self):
-        self.v_vector = np.load('basic_opt_v.npy')
-        self.tags = pickle.load(open("basic_tags.p", "rb"))
-        self.features = pickle.load(open("basic_features_dict.p", "rb"))
-        self.freq_tags = pickle.load(open("basic_freq_tags.p", "rb"))
+        self.v_vector = np.load('improved_opt_v.npy')
+        self.tags = pickle.load(open("improved_tags.p", "rb"))
+        self.features = pickle.load(open("improved_features_dict.p", "rb"))
+        self.freq_tags = pickle.load(open("improved_freq_tags.p", "rb"))
 
     # Get all the possible tags at a position in the sentence
     def get_possible_tags_at_location(self, index, word):
@@ -29,6 +56,7 @@ class MemmInference:
             if word in self.freq_tags:
                 return self.freq_tags[word]
             return ['NNP', 'JJ', 'CD', 'NNS', 'DT', 'NN', 'IN', 'TO', 'VBD', 'VB', 'VBN', 'VBG', 'CC']
+            # return self.tags
 
     def get_num_features_for_given_tuple(self, data_tuple):
         num_f = []
@@ -47,6 +75,14 @@ class MemmInference:
             num_f.append(self.features[(tag_minus, word_tag)])
         if ((tag_minus2, tag_minus), word_tag) in self.features:
             num_f.append(self.features[((tag_minus2, tag_minus), word_tag)])
+
+        # Improved
+        # if (word_tag, word_tag) in self.features:
+        #     num_f.append(self.features[(word_tag, word_tag)])
+        if self.check_suffix(word, 3, 'ing') and word_tag == 'VBG':
+            num_f.append(self.features[('ing', 'ing')])
+        if self.check_prefix(word, 3, 'pre') and word_tag == 'NN':
+            num_f.append(self.features[('pre', 'pre')])
 
         return num_f
 

@@ -250,8 +250,9 @@ class Trainer:
         start = datetime.now()
         res = fmin_l_bfgs_b(self.func_l_new, x0=v_vector_temp, fprime=self.get_gradient_vector)
         self.v_vec = res[0]
+        print(self.last_l)
         print('Found the best v only in ' + str(datetime.now()-start) + '!! ITS A NEW RECORD!!!')
-
+        print(res[2])
         print('\nSaving the data...')
         if self.improved_mode:
             ImprovedModelFeature.save_data_to_files(self)
