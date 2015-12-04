@@ -14,19 +14,6 @@ class MemmInference:
 
         self.freq_tags = dict()
 
-    # Auxiliary function - check if a given word ends with the given suffix (num_char is the length of the suffix)
-    @staticmethod
-    def check_suffix(word, num_char, suffix):
-        if word == '':
-            return False
-        word_chars = list(word)
-        suffix_index = num_char
-        for i in range(len(word)-1, len(word)-num_char-1, -1):
-            if word_chars[i] != suffix[suffix_index-1]:
-                return False
-            suffix_index -= 1
-        return True
-
     # Auxiliary function - check if a given word starts with the given prefix (num_char is the length of the prefix)
     @staticmethod
     def check_prefix(word, num_char, prefix):
@@ -54,6 +41,10 @@ class MemmInference:
             if c != '.' and c != ',' and c not in nums:
                 return False
         return True
+
+    @staticmethod
+    def get_suffix(word, num):
+        return word[-num:]
 
     # Load the data that was learned before
     def load_data(self):
@@ -91,10 +82,10 @@ class MemmInference:
             num_f.append(self.features[((tag_minus2, tag_minus), word_tag)])
 
         # Improved
-        # if (word_tag, word_tag) in self.features:
-        #     num_f.append(self.features[(word_tag, word_tag)])
-        if self.check_suffix(word, 3, 'ing') and word_tag == 'VBG':
-            num_f.append(self.features[('ing', 'ing')])
+
+        if (self.get_suffix(word, 3), word_tag) in self.features:
+            num_f.append(self.features[(self.get_suffix(word, 3), word_tag)])
+
         if self.check_prefix(word, 3, 'pre') and word_tag == 'NN':
             num_f.append(self.features[('pre', 'pre')])
         if self.check_number(word) and word_tag == 'CD':
