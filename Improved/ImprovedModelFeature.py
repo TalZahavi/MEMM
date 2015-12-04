@@ -2,23 +2,10 @@ import pickle
 import numpy as np
 
 
-feature_102_dict = dict()  # Starts with 'pre', and the is 'NN'
-
 feature_number_dict = dict()  # Check if the word represent a number, and the tag is CD
+feature_capital_dict = dict()  # Check if the word starts with a capital letter, not the first word, and the tag is NNP
 feature_suffix_dict = dict()  # Holds the tags for suffix (currently only length 3 suffix)
-
-
-# Auxiliary function - check if a given word starts with the given prefix (num_char is the length of the prefix)
-def check_prefix(word, num_char, prefix):
-    if word == '':
-        return False
-    word_chars = list(word)
-    prefix_index = 0
-    for i in range(0, num_char):
-        if word_chars[i] != prefix[prefix_index]:
-            return False
-        prefix_index += 1
-    return True
+feature_prefix_dict = dict()  # Holds the tags for prefix (currently only length 2 prefix)
 
 
 # Auxiliary function - check if a given word represent a number
@@ -36,9 +23,21 @@ def check_number(word):
     return True
 
 
+# Auxiliary function - check if a given word start with a capital, and not the first word of the sentece
+def check_capital(word, index):
+    if index == 0:
+        return False
+    return word[0].isupper()
+
+
 # Auxiliary function - getting the last n chars
 def get_suffix(word, num):
     return word[-num:]
+
+
+# Auxiliary function - getting the first n chars
+def get_prefix(word, num):
+    return word[0:num]
 
 
 # Fill the features dicts according to the seen data
@@ -54,13 +53,14 @@ def fill_features_dicts(self):
         add_bigram_tag_to_dict(self, tag_minus, word_tag)
         add_trigram_tag_to_dict(self, tag_minus2, tag_minus, word_tag)
 
-        if check_prefix(word, 3, 'pre') and word_tag == 'NN':
-            add_prefix_pre_to_dict(self)
         if check_number(word) and word_tag == 'CD':
             add_number_to_dict(self)
+        if check_capital(word, word_index) and word_tag == 'NNP':
+            add_capital_to_dict(self)
 
         if (len(word)) > 3:
             add_general_suffix_to_dict(self, word, word_tag)
+            add_general_prefix_to_dict(self, word, word_tag)
 
 
 # Fill the general suffix feature (Feature 101)
@@ -80,6 +80,24 @@ def add_general_suffix_to_dict(self, word, word_tag):
         self.num_features += 1
 
 
+# Fill the general prefix feature (Feature 102)
+def add_general_prefix_to_dict(self, word, word_tag):
+    prefix_2 = get_prefix(word, 2)
+
+    if prefix_2 in feature_prefix_dict:
+        prefix_tags_dict = feature_prefix_dict[prefix_2]
+
+        if word_tag in prefix_tags_dict:
+            prefix_tags_dict[word_tag] += 1
+        else:
+            prefix_tags_dict[word_tag] = 1
+            self.num_features += 1
+
+    else:
+        feature_prefix_dict[prefix_2] = {word_tag: 1}
+        self.num_features += 1
+
+
 # Fill the number feature
 def add_number_to_dict(self):
     if 'number' in feature_number_dict:
@@ -90,14 +108,13 @@ def add_number_to_dict(self):
         feature_number_dict['number'] = 1
 
 
-# Fill the 102 feature with the number of times the feature seen
-def add_prefix_pre_to_dict(self):
-    if 'pre' in feature_102_dict:
-        feature_102_dict['pre'] += 1
+def add_capital_to_dict(self):
+    if 'capital' in feature_capital_dict:
         self.num_features += 1
+        feature_capital_dict['capital'] += 1
     else:
-        feature_102_dict['pre'] = 1
         self.num_features += 1
+        feature_capital_dict['capital'] = 1
 
 
 # Fill the 100 feature with a new seen feature
@@ -198,12 +215,22 @@ def get_frequented_features(self):
                     counter += 1
                     self.num_features += 1
 
-    self.features[('pre', 'pre')] = counter
-    self.num_his_per_feature[counter] = feature_102_dict['pre']
-    counter += 1
-    self.num_features += 1
+    for prefix in feature_prefix_dict:
+        tags_for_prefix_dict = feature_prefix_dict[prefix]
+        for tag_for_pre in tags_for_prefix_dict:
+            if tags_for_prefix_dict[tag_for_pre] > 700:
+                if (prefix, tag_for_pre) not in self.features:
+                    self.features[(prefix, tag_for_pre)] = counter
+                    self.num_his_per_feature[counter] = tags_for_prefix_dict[tag_for_pre]
+                    counter += 1
+                    self.num_features += 1
+
     self.features[('number', 'number')] = counter
     self.num_his_per_feature[counter] = feature_number_dict['number']
+    counter += 1
+    self.num_features += 1
+    self.features[('capital', 'capital')] = counter
+    self.num_his_per_feature[counter] = feature_capital_dict['capital']
     counter += 1
     self.num_features += 1
 
@@ -224,6 +251,7 @@ def calculate_all_dot_f_for_tuple(self):
             tag_minus = history[1]
             tag_minus2 = history[0]
             suffix_3 = get_suffix(word, 3)
+            prefix_2 = get_prefix(word, 2)
 
             if (word, word_tag) in self.features:
                 temp_arr.append(self.features[(word, word_tag)])
@@ -234,10 +262,12 @@ def calculate_all_dot_f_for_tuple(self):
 
             if (suffix_3, word_tag) in self.features:
                 temp_arr.append(self.features[(suffix_3, word_tag)])
-            if check_prefix(word, 3, 'pre') and word_tag == 'NN':
-                temp_arr.append(self.features[('pre', 'pre')])
+            if (prefix_2, word_tag) in self.features:
+                temp_arr.append(self.features[(prefix_2, word_tag)])
             if check_number(word) and word_tag == 'CD':
                 temp_arr.append(self.features[('number', 'number')])
+            if check_capital(word, word_index) and word_tag == 'NNP':
+                temp_arr.append(self.features[('capital', 'capital')])
 
             self.calculated_features[(history, word_tag)] = temp_arr
 

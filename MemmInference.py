@@ -14,19 +14,6 @@ class MemmInference:
 
         self.freq_tags = dict()
 
-    # Auxiliary function - check if a given word starts with the given prefix (num_char is the length of the prefix)
-    @staticmethod
-    def check_prefix(word, num_char, prefix):
-        if word == '':
-            return False
-        word_chars = list(word)
-        prefix_index = 0
-        for i in range(0, num_char):
-            if word_chars[i] != prefix[prefix_index]:
-                return False
-            prefix_index += 1
-        return True
-
     # Auxiliary function - check if a given word represent a number
     @staticmethod
     def check_number(word):
@@ -43,8 +30,19 @@ class MemmInference:
         return True
 
     @staticmethod
+    def check_capital(word, index):
+        if index == 0:
+            return False
+        return word[0].isupper()
+
+
+    @staticmethod
     def get_suffix(word, num):
         return word[-num:]
+
+    @staticmethod
+    def get_prefix(word, num):
+        return word[0:num]
 
     # Load the data that was learned before
     def load_data(self):
@@ -85,11 +83,13 @@ class MemmInference:
 
         if (self.get_suffix(word, 3), word_tag) in self.features:
             num_f.append(self.features[(self.get_suffix(word, 3), word_tag)])
+        # if (self.get_prefix(word, 2), word_tag) in self.features:
+        #     num_f.append(self.features[(self.get_prefix(word, 2), word_tag)])
 
-        if self.check_prefix(word, 3, 'pre') and word_tag == 'NN':
-            num_f.append(self.features[('pre', 'pre')])
         if self.check_number(word) and word_tag == 'CD':
             num_f.append(self.features['number', 'number'])
+        if self.check_capital(word, word_index) and word_tag == 'NNP':
+            num_f.append(self.features['capital', 'capital'])
 
         return num_f
 
