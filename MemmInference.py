@@ -35,6 +35,12 @@ class MemmInference:
             return False
         return word[0].isupper()
 
+    # Auxiliary function - check if the word start\end with a letter, and there's "-" in the middle
+    @staticmethod
+    def check_bar(word):
+        if not word[0].isalpha() or not word[len(word)-1].isalpha():
+            return False
+        return '-' in word
 
     @staticmethod
     def get_suffix(word, num):
@@ -81,15 +87,19 @@ class MemmInference:
 
         # Improved
 
+        if (self.get_suffix(word, 2), word_tag) in self.features:
+            num_f.append(self.features[(self.get_suffix(word, 2), word_tag)])
         if (self.get_suffix(word, 3), word_tag) in self.features:
             num_f.append(self.features[(self.get_suffix(word, 3), word_tag)])
-        # if (self.get_prefix(word, 2), word_tag) in self.features:
-        #     num_f.append(self.features[(self.get_prefix(word, 2), word_tag)])
+        if (self.get_prefix(word, 2), word_tag) in self.features:
+            num_f.append(self.features[(self.get_prefix(word, 2), word_tag)])
 
         if self.check_number(word) and word_tag == 'CD':
             num_f.append(self.features['number', 'number'])
         if self.check_capital(word, word_index) and word_tag == 'NNP':
             num_f.append(self.features['capital', 'capital'])
+        if self.check_bar(word) and word_tag == 'JJ':
+            num_f.append(self.features['bar', 'bar'])
 
         return num_f
 
