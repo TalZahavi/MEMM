@@ -61,6 +61,7 @@ class MemmInference:
             self.features = pickle.load(open("improved_features_dict.p", "rb"))
             self.freq_tags = pickle.load(open("improved_freq_tags.p", "rb"))
         else:
+            self.improved_mode = False
             self.v_vector = np.load('basic_opt_v.npy')
             self.tags = pickle.load(open("basic_tags.p", "rb"))
             self.features = pickle.load(open("basic_features_dict.p", "rb"))
@@ -244,7 +245,14 @@ class MemmInference:
         return correct, num_of_words
 
     # Go over the "test" (sentences with tags) and write the accuracy)
-    def check_acq_for_file_with_tags(self):
+    def check_acq_for_file_with_tags(self, mode):
+        if mode == 'Improved':
+            self.load_data('Improved')
+        elif mode == 'Basic':
+            self.load_data('Basic')
+        else:
+            print('PLEASE CHOOSE IMPROVED\BASIC!')
+            return
         num_sentence = 0
         sum_correct = 0
         total = 0
@@ -262,10 +270,9 @@ class MemmInference:
 
 
 y = MemmInference()
-y.load_data('Improved')
 start = datetime.now()
 
-y.check_acq_for_file_with_tags()
+y.check_acq_for_file_with_tags('Improved')
 
 
 print('\nDone in ' + str(datetime.now()-start))
