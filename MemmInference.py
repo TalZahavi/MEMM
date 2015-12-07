@@ -254,11 +254,37 @@ class MemmInference:
         f.close()
         print('\nThe final accuracy is ' + str(round((sum_correct/total)*100, 2)) + '%')
 
+    def inference_comp(self, mode):
+        if mode == 'Improved':
+            self.load_data('Improved')
+        elif mode == 'Basic':
+            self.load_data('Basic')
+        elif mode == 'Comp':
+            self.load_data('Comp')
+        else:
+            print('PLEASE CHOOSE IMPROVED\BASIC\COMP!')
+            return
+
+        if mode == 'Basic':
+            f_w = open('comp_m1_200279040.wtag', 'w+')
+        else:
+            f_w = open('comp_m2_200279040.wtag', 'w+')
+        counter_sen = 0
+        with open('comp.words', 'r') as f:
+            for line in f:
+                counter_sen += 1
+                my_guess = self.get_sentence_with_tags(line, self.sentence_inference(line))
+                f_w.write(my_guess)
+                if counter_sen != 1000:
+                    f_w.write('\n')
+        f.close()
+        f_w.close()
 
 y = MemmInference()
 start = datetime.now()
 
 y.check_acq_for_file_with_tags('Comp')
+# y.inference_comp('Comp')
 
 
 print('\nDone in ' + str(datetime.now()-start))
