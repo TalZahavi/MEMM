@@ -1,5 +1,6 @@
 import pickle
 import numpy as np
+import Utilities
 
 
 feature_number_dict = dict()  # Check if the word represent a number, and the tag is CD
@@ -8,45 +9,6 @@ feature_bar_dict = dict()  # Check if the word has "-" in the middle, and the ta
 
 feature_suffix_dict = dict()  # Holds the tags for suffix (currently only length 3 suffix)
 feature_prefix_dict = dict()  # Holds the tags for prefix (currently only length 2 prefix)
-
-
-# Auxiliary function - check if a given word represent a number
-def check_number(word):
-    nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    found_one_digit = False
-    for c in list(word):
-        if c in nums:
-            found_one_digit = True
-    if not found_one_digit:
-        return False
-    for c in list(word):
-        if c != '.' and c != ',' and c not in nums:
-            return False
-    return True
-
-
-# Auxiliary function - check if a given word start with a capital, and not the first word of the sentence
-def check_capital(word, index):
-    if index == 0:
-        return False
-    return word[0].isupper()
-
-
-# Auxiliary function - check if the word start\end with a letter, and there's "-" in the middle
-def check_bar(word):
-    if not word[0].isalpha() or not word[len(word)-1].isalpha():
-        return False
-    return '-' in word
-
-
-# Auxiliary function - getting the last n chars
-def get_suffix(word, num):
-    return word[-num:]
-
-
-# Auxiliary function - getting the first n chars
-def get_prefix(word, num):
-    return word[0:num]
 
 
 # Fill the features dicts according to the seen data
@@ -62,11 +24,11 @@ def fill_features_dicts(self):
         add_bigram_tag_to_dict(self, tag_minus, word_tag)
         add_trigram_tag_to_dict(self, tag_minus2, tag_minus, word_tag)
 
-        if check_number(word) and word_tag == 'CD':
+        if Utilities.check_number(word) and word_tag == 'CD':
             add_number_to_dict(self)
-        if check_capital(word, word_index) and word_tag == 'NNP':
+        if Utilities.check_capital(word, word_index) and word_tag == 'NNP':
             add_capital_to_dict(self)
-        if check_bar(word) and word_tag == 'JJ':
+        if Utilities.check_bar(word) and word_tag == 'JJ':
             add_bar_to_dict(self)
 
         if (len(word)) > 3:
@@ -76,7 +38,7 @@ def fill_features_dicts(self):
 
 # Fill the general suffix feature (Feature 101)
 def add_general_suffix_to_dict(self, word, word_tag):
-    suffix_3 = get_suffix(word, 3)
+    suffix_3 = Utilities.get_suffix(word, 3)
 
     if suffix_3 in feature_suffix_dict:
         suffix_tags_dict = feature_suffix_dict[suffix_3]
@@ -90,7 +52,7 @@ def add_general_suffix_to_dict(self, word, word_tag):
         feature_suffix_dict[suffix_3] = {word_tag: 1}
         self.num_features += 1
 
-    suffix_2 = get_suffix(word, 2)
+    suffix_2 = Utilities.get_suffix(word, 2)
 
     if suffix_2 in feature_suffix_dict:
         suffix_tags_dict = feature_suffix_dict[suffix_2]
@@ -107,7 +69,7 @@ def add_general_suffix_to_dict(self, word, word_tag):
 
 # Fill the general prefix feature (Feature 102)
 def add_general_prefix_to_dict(self, word, word_tag):
-    prefix_2 = get_prefix(word, 2)
+    prefix_2 = Utilities.get_prefix(word, 2)
 
     if prefix_2 in feature_prefix_dict:
         prefix_tags_dict = feature_prefix_dict[prefix_2]
@@ -143,6 +105,7 @@ def add_capital_to_dict(self):
         feature_capital_dict['capital'] = 1
 
 
+# Fill the bar feature
 def add_bar_to_dict(self):
     if 'bar' in feature_bar_dict:
         self.num_features += 1
@@ -300,9 +263,9 @@ def calculate_all_dot_f_for_tuple(self):
             word = split_sentence[word_index]
             tag_minus = history[1]
             tag_minus2 = history[0]
-            suffix_3 = get_suffix(word, 3)
-            suffix_2 = get_suffix(word, 2)
-            prefix_2 = get_prefix(word, 2)
+            suffix_3 = Utilities.get_suffix(word, 3)
+            suffix_2 = Utilities.get_suffix(word, 2)
+            prefix_2 = Utilities.get_prefix(word, 2)
 
             if (word, word_tag) in self.features:
                 temp_arr.append(self.features[(word, word_tag)])
@@ -317,11 +280,11 @@ def calculate_all_dot_f_for_tuple(self):
                 temp_arr.append(self.features[(suffix_2, word_tag)])
             if (prefix_2, word_tag) in self.features:
                 temp_arr.append(self.features[(prefix_2, word_tag)])
-            if check_number(word) and word_tag == 'CD':
+            if Utilities.check_number(word) and word_tag == 'CD':
                 temp_arr.append(self.features[('number', 'number')])
-            if check_capital(word, word_index) and word_tag == 'NNP':
+            if Utilities.check_capital(word, word_index) and word_tag == 'NNP':
                 temp_arr.append(self.features[('capital', 'capital')])
-            if check_bar(word) and word_tag == 'JJ':
+            if Utilities.check_bar(word) and word_tag == 'JJ':
                 temp_arr.append(self.features[('bar', 'bar')])
 
             self.calculated_features[(history, word_tag)] = temp_arr

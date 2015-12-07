@@ -6,8 +6,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/improved_freq_tags.p" afterPath="$PROJECT_DIR$/improved_freq_tags.p" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/improved_opt_v.npy" afterPath="$PROJECT_DIR$/improved_opt_v.npy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/improved_tags.p" afterPath="$PROJECT_DIR$/improved_tags.p" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Improved/ImprovedModelFeature.py" afterPath="$PROJECT_DIR$/Improved/ImprovedModelFeature.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MemmInference.py" afterPath="$PROJECT_DIR$/MemmInference.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Trainer.py" afterPath="$PROJECT_DIR$/Trainer.py" />
     </list>
     <ignored path="MEMM.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="Trainer.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Trainer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.057142857">
-              <caret line="247" column="95" selection-start-line="247" selection-start-column="95" selection-end-line="247" selection-end-column="95" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="245" column="0" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
                 <element signature="e#1249#1534#0" expanded="false" />
@@ -57,44 +58,47 @@
         <entry file="file://$PROJECT_DIR$/MemmInference.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="278" column="0" selection-start-line="278" selection-start-column="0" selection-end-line="278" selection-end-column="0" />
+              <caret line="49" column="32" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
               <folding>
-                <element signature="e#546#920#0" expanded="false" />
-                <element signature="e#984#1056#0" expanded="false" />
-                <element signature="e#1209#1321#0" expanded="false" />
-                <element signature="e#4331#4669#0" expanded="false" />
-                <element signature="e#5945#6175#0" expanded="false" />
-                <element signature="e#6259#7498#0" expanded="false" />
-                <element signature="e#7619#7824#0" expanded="false" />
-                <element signature="e#7971#8507#0" expanded="false" />
+                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#5074#5304#0" expanded="false" />
+                <element signature="e#5388#6627#0" expanded="false" />
+                <element signature="e#6748#6953#0" expanded="false" />
+                <element signature="e#7100#7636#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ImprovedModelFeature.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Improved/ImprovedModelFeature.py">
+      <file leaf-file-name="Utilities.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Utilities.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="324" column="62" selection-start-line="324" selection-start-column="62" selection-end-line="324" selection-end-column="62" />
+              <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImprovedModelFeature.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Improved/ImprovedModelFeature.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.5714286">
+              <caret line="106" column="0" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <element signature="e#608#942#0" expanded="false" />
-                <element signature="e#1087#1151#0" expanded="false" />
-                <element signature="e#1275#1379#0" expanded="false" />
-                <element signature="e#1461#1479#0" expanded="false" />
-                <element signature="e#1562#1580#0" expanded="false" />
-                <element signature="e#1671#2517#0" expanded="false" />
-                <element signature="e#2623#3438#0" expanded="false" />
-                <element signature="e#3544#3949#0" expanded="false" />
-                <element signature="e#4009#4204#0" expanded="false" />
-                <element signature="e#4266#4464#0" expanded="false" />
-                <element signature="e#4498#4675#0" expanded="false" />
-                <element signature="e#4823#5197#0" expanded="false" />
-                <element signature="e#5352#5728#0" expanded="false" />
-                <element signature="e#5896#6351#0" expanded="false" />
-                <element signature="e#6555#9975#0" expanded="false" />
-                <element signature="e#12181#12464#0" expanded="false" />
+                <element signature="e#621#1497#0" expanded="false" />
+                <element signature="e#1603#2438#0" expanded="false" />
+                <element signature="e#2544#2959#0" expanded="false" />
+                <element signature="e#3019#3214#0" expanded="false" />
+                <element signature="e#3276#3477#0" expanded="false" />
+                <element signature="e#3531#3708#0" expanded="false" />
+                <element signature="e#3856#4230#0" expanded="false" />
+                <element signature="e#4385#4761#0" expanded="false" />
+                <element signature="e#4929#5384#0" expanded="false" />
+                <element signature="e#5588#9008#0" expanded="false" />
+                <element signature="e#9199#11237#0" expanded="false" />
+                <element signature="e#11274#11557#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -128,9 +132,10 @@
         <option value="$PROJECT_DIR$/BasicModel.py" />
         <option value="$PROJECT_DIR$/BASIC/BasicModelFeatures.py" />
         <option value="$PROJECT_DIR$/train.wtag" />
-        <option value="$PROJECT_DIR$/Improved/ImprovedModelFeature.py" />
         <option value="$PROJECT_DIR$/Trainer.py" />
+        <option value="$PROJECT_DIR$/Utilities.py" />
         <option value="$PROJECT_DIR$/MemmInference.py" />
+        <option value="$PROJECT_DIR$/Improved/ImprovedModelFeature.py" />
       </list>
     </option>
   </component>
@@ -489,7 +494,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1064" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1064" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1737982" sideWeight="0.49339935" order="0" side_tool="false" content_ui="combo" />
@@ -532,6 +537,124 @@
     <entry file="file://$PROJECT_DIR$/Trainer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
+          <caret line="264" column="0" selection-start-line="264" selection-start-column="0" selection-end-line="264" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#1249#1534#0" expanded="false" />
+            <element signature="e#1613#2050#0" expanded="false" />
+            <element signature="e#2162#2304#0" expanded="false" />
+            <element signature="e#2460#3350#0" expanded="false" />
+            <element signature="e#4244#4422#0" expanded="false" />
+            <element signature="e#4840#5001#0" expanded="false" />
+            <element signature="e#5120#5717#0" expanded="false" />
+            <element signature="e#5816#6063#0" expanded="false" />
+            <element signature="e#6110#6254#0" expanded="false" />
+            <element signature="e#6735#6843#0" expanded="false" />
+            <element signature="e#6995#7208#0" expanded="false" />
+            <element signature="e#7330#7496#0" expanded="false" />
+            <element signature="e#7593#8010#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MemmInference.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Improved/ImprovedModelFeature.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="316" column="68" selection-start-line="316" selection-start-column="68" selection-end-line="316" selection-end-column="68" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#621#1497#0" expanded="false" />
+            <element signature="e#1603#2438#0" expanded="false" />
+            <element signature="e#2544#2959#0" expanded="false" />
+            <element signature="e#3019#3214#0" expanded="false" />
+            <element signature="e#3276#3477#0" expanded="false" />
+            <element signature="e#3531#3708#0" expanded="false" />
+            <element signature="e#3856#4230#0" expanded="false" />
+            <element signature="e#4385#4761#0" expanded="false" />
+            <element signature="e#4929#5384#0" expanded="false" />
+            <element signature="e#5588#9008#0" expanded="false" />
+            <element signature="e#9199#11237#0" expanded="false" />
+            <element signature="e#11274#11557#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#1249#1534#0" expanded="false" />
+            <element signature="e#1613#2050#0" expanded="false" />
+            <element signature="e#2162#2304#0" expanded="false" />
+            <element signature="e#2460#3350#0" expanded="false" />
+            <element signature="e#4244#4422#0" expanded="false" />
+            <element signature="e#4840#5001#0" expanded="false" />
+            <element signature="e#5120#5717#0" expanded="false" />
+            <element signature="e#5816#6063#0" expanded="false" />
+            <element signature="e#6110#6254#0" expanded="false" />
+            <element signature="e#6735#6843#0" expanded="false" />
+            <element signature="e#6995#7208#0" expanded="false" />
+            <element signature="e#7330#7496#0" expanded="false" />
+            <element signature="e#7593#8010#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MemmInference.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="278" column="0" selection-start-line="278" selection-start-column="0" selection-end-line="278" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Improved/ImprovedModelFeature.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="324" column="62" selection-start-line="324" selection-start-column="62" selection-end-line="324" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#621#1497#0" expanded="false" />
+            <element signature="e#1603#2438#0" expanded="false" />
+            <element signature="e#2544#2959#0" expanded="false" />
+            <element signature="e#3019#3214#0" expanded="false" />
+            <element signature="e#3276#3477#0" expanded="false" />
+            <element signature="e#3531#3708#0" expanded="false" />
+            <element signature="e#3856#4230#0" expanded="false" />
+            <element signature="e#4385#4761#0" expanded="false" />
+            <element signature="e#4929#5384#0" expanded="false" />
+            <element signature="e#5588#9008#0" expanded="false" />
+            <element signature="e#9199#11237#0" expanded="false" />
+            <element signature="e#11274#11557#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
           <caret line="269" column="0" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
@@ -557,14 +680,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
           <folding>
-            <element signature="e#546#920#0" expanded="false" />
-            <element signature="e#984#1056#0" expanded="false" />
-            <element signature="e#1209#1321#0" expanded="false" />
-            <element signature="e#4331#4669#0" expanded="false" />
-            <element signature="e#5945#6175#0" expanded="false" />
-            <element signature="e#6259#7498#0" expanded="false" />
-            <element signature="e#7619#7824#0" expanded="false" />
-            <element signature="e#7971#8507#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -575,22 +695,18 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#608#942#0" expanded="false" />
-            <element signature="e#1087#1151#0" expanded="false" />
-            <element signature="e#1275#1379#0" expanded="false" />
-            <element signature="e#1461#1479#0" expanded="false" />
-            <element signature="e#1562#1580#0" expanded="false" />
-            <element signature="e#1671#2517#0" expanded="false" />
-            <element signature="e#2623#3438#0" expanded="false" />
-            <element signature="e#3544#3949#0" expanded="false" />
-            <element signature="e#4009#4204#0" expanded="false" />
-            <element signature="e#4266#4464#0" expanded="false" />
-            <element signature="e#4498#4675#0" expanded="false" />
-            <element signature="e#4823#5197#0" expanded="false" />
-            <element signature="e#5352#5728#0" expanded="false" />
-            <element signature="e#5896#6351#0" expanded="false" />
-            <element signature="e#6555#9975#0" expanded="false" />
-            <element signature="e#12181#12464#0" expanded="false" />
+            <element signature="e#621#1497#0" expanded="false" />
+            <element signature="e#1603#2438#0" expanded="false" />
+            <element signature="e#2544#2959#0" expanded="false" />
+            <element signature="e#3019#3214#0" expanded="false" />
+            <element signature="e#3276#3477#0" expanded="false" />
+            <element signature="e#3531#3708#0" expanded="false" />
+            <element signature="e#3856#4230#0" expanded="false" />
+            <element signature="e#4385#4761#0" expanded="false" />
+            <element signature="e#4929#5384#0" expanded="false" />
+            <element signature="e#5588#9008#0" expanded="false" />
+            <element signature="e#9199#11237#0" expanded="false" />
+            <element signature="e#11274#11557#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -623,14 +739,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
           <folding>
-            <element signature="e#546#920#0" expanded="false" />
-            <element signature="e#984#1056#0" expanded="false" />
-            <element signature="e#1209#1321#0" expanded="false" />
-            <element signature="e#4331#4669#0" expanded="false" />
-            <element signature="e#5945#6175#0" expanded="false" />
-            <element signature="e#6259#7498#0" expanded="false" />
-            <element signature="e#7619#7824#0" expanded="false" />
-            <element signature="e#7971#8507#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -641,22 +754,18 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#608#942#0" expanded="false" />
-            <element signature="e#1087#1151#0" expanded="false" />
-            <element signature="e#1275#1379#0" expanded="false" />
-            <element signature="e#1461#1479#0" expanded="false" />
-            <element signature="e#1562#1580#0" expanded="false" />
-            <element signature="e#1671#2517#0" expanded="false" />
-            <element signature="e#2623#3438#0" expanded="false" />
-            <element signature="e#3544#3949#0" expanded="false" />
-            <element signature="e#4009#4204#0" expanded="false" />
-            <element signature="e#4266#4464#0" expanded="false" />
-            <element signature="e#4498#4675#0" expanded="false" />
-            <element signature="e#4823#5197#0" expanded="false" />
-            <element signature="e#5352#5728#0" expanded="false" />
-            <element signature="e#5896#6351#0" expanded="false" />
-            <element signature="e#6555#9975#0" expanded="false" />
-            <element signature="e#12181#12464#0" expanded="false" />
+            <element signature="e#621#1497#0" expanded="false" />
+            <element signature="e#1603#2438#0" expanded="false" />
+            <element signature="e#2544#2959#0" expanded="false" />
+            <element signature="e#3019#3214#0" expanded="false" />
+            <element signature="e#3276#3477#0" expanded="false" />
+            <element signature="e#3531#3708#0" expanded="false" />
+            <element signature="e#3856#4230#0" expanded="false" />
+            <element signature="e#4385#4761#0" expanded="false" />
+            <element signature="e#4929#5384#0" expanded="false" />
+            <element signature="e#5588#9008#0" expanded="false" />
+            <element signature="e#9199#11237#0" expanded="false" />
+            <element signature="e#11274#11557#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -666,14 +775,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#546#920#0" expanded="false" />
-            <element signature="e#984#1056#0" expanded="false" />
-            <element signature="e#1209#1321#0" expanded="false" />
-            <element signature="e#4331#4669#0" expanded="false" />
-            <element signature="e#5945#6175#0" expanded="false" />
-            <element signature="e#6259#7498#0" expanded="false" />
-            <element signature="e#7619#7824#0" expanded="false" />
-            <element signature="e#7971#8507#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -706,14 +812,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#546#920#0" expanded="false" />
-            <element signature="e#984#1056#0" expanded="false" />
-            <element signature="e#1209#1321#0" expanded="false" />
-            <element signature="e#4331#4669#0" expanded="false" />
-            <element signature="e#5945#6175#0" expanded="false" />
-            <element signature="e#6259#7498#0" expanded="false" />
-            <element signature="e#7619#7824#0" expanded="false" />
-            <element signature="e#7971#8507#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -746,14 +849,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding>
-            <element signature="e#546#920#0" expanded="false" />
-            <element signature="e#984#1056#0" expanded="false" />
-            <element signature="e#1209#1321#0" expanded="false" />
-            <element signature="e#4331#4669#0" expanded="false" />
-            <element signature="e#5945#6175#0" expanded="false" />
-            <element signature="e#6259#7498#0" expanded="false" />
-            <element signature="e#7619#7824#0" expanded="false" />
-            <element signature="e#7971#8507#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -786,14 +886,11 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#546#920#0" expanded="false" />
-            <element signature="e#984#1056#0" expanded="false" />
-            <element signature="e#1209#1321#0" expanded="false" />
-            <element signature="e#4331#4669#0" expanded="false" />
-            <element signature="e#5945#6175#0" expanded="false" />
-            <element signature="e#6259#7498#0" expanded="false" />
-            <element signature="e#7619#7824#0" expanded="false" />
-            <element signature="e#7971#8507#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -994,53 +1091,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Improved/ImprovedModelFeature.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="324" column="62" selection-start-line="324" selection-start-column="62" selection-end-line="324" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#608#942#0" expanded="false" />
-            <element signature="e#1087#1151#0" expanded="false" />
-            <element signature="e#1275#1379#0" expanded="false" />
-            <element signature="e#1461#1479#0" expanded="false" />
-            <element signature="e#1562#1580#0" expanded="false" />
-            <element signature="e#1671#2517#0" expanded="false" />
-            <element signature="e#2623#3438#0" expanded="false" />
-            <element signature="e#3544#3949#0" expanded="false" />
-            <element signature="e#4009#4204#0" expanded="false" />
-            <element signature="e#4266#4464#0" expanded="false" />
-            <element signature="e#4498#4675#0" expanded="false" />
-            <element signature="e#4823#5197#0" expanded="false" />
-            <element signature="e#5352#5728#0" expanded="false" />
-            <element signature="e#5896#6351#0" expanded="false" />
-            <element signature="e#6555#9975#0" expanded="false" />
-            <element signature="e#12181#12464#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MemmInference.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="278" column="0" selection-start-line="278" selection-start-column="0" selection-end-line="278" selection-end-column="0" />
-          <folding>
-            <element signature="e#546#920#0" expanded="false" />
-            <element signature="e#984#1056#0" expanded="false" />
-            <element signature="e#1209#1321#0" expanded="false" />
-            <element signature="e#4331#4669#0" expanded="false" />
-            <element signature="e#5945#6175#0" expanded="false" />
-            <element signature="e#6259#7498#0" expanded="false" />
-            <element signature="e#7619#7824#0" expanded="false" />
-            <element signature="e#7971#8507#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Trainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.057142857">
-          <caret line="247" column="95" selection-start-line="247" selection-start-column="95" selection-end-line="247" selection-end-column="95" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="245" column="0" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
             <element signature="e#1249#1534#0" expanded="false" />
@@ -1056,6 +1110,50 @@
             <element signature="e#6995#7208#0" expanded="false" />
             <element signature="e#7330#7496#0" expanded="false" />
             <element signature="e#7593#8010#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MemmInference.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="49" column="32" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#5074#5304#0" expanded="false" />
+            <element signature="e#5388#6627#0" expanded="false" />
+            <element signature="e#6748#6953#0" expanded="false" />
+            <element signature="e#7100#7636#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Improved/ImprovedModelFeature.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.5714286">
+          <caret line="106" column="0" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#621#1497#0" expanded="false" />
+            <element signature="e#1603#2438#0" expanded="false" />
+            <element signature="e#2544#2959#0" expanded="false" />
+            <element signature="e#3019#3214#0" expanded="false" />
+            <element signature="e#3276#3477#0" expanded="false" />
+            <element signature="e#3531#3708#0" expanded="false" />
+            <element signature="e#3856#4230#0" expanded="false" />
+            <element signature="e#4385#4761#0" expanded="false" />
+            <element signature="e#4929#5384#0" expanded="false" />
+            <element signature="e#5588#9008#0" expanded="false" />
+            <element signature="e#9199#11237#0" expanded="false" />
+            <element signature="e#11274#11557#0" expanded="false" />
           </folding>
         </state>
       </provider>

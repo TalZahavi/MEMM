@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+import Utilities
 from datetime import datetime
 
 
@@ -15,42 +16,6 @@ class MemmInference:
         self.freq_tags = dict()
 
         self.improved_mode = False
-
-    # Auxiliary function - check if a given word represent a number
-    @staticmethod
-    def check_number(word):
-        nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        found_one_digit = False
-        for c in list(word):
-            if c in nums:
-                found_one_digit = True
-        if not found_one_digit:
-            return False
-        for c in list(word):
-            if c != '.' and c != ',' and c not in nums:
-                return False
-        return True
-
-    @staticmethod
-    def check_capital(word, index):
-        if index == 0:
-            return False
-        return word[0].isupper()
-
-    # Auxiliary function - check if the word start\end with a letter, and there's "-" in the middle
-    @staticmethod
-    def check_bar(word):
-        if not word[0].isalpha() or not word[len(word)-1].isalpha():
-            return False
-        return '-' in word
-
-    @staticmethod
-    def get_suffix(word, num):
-        return word[-num:]
-
-    @staticmethod
-    def get_prefix(word, num):
-        return word[0:num]
 
     # Load the data that was learned before
     def load_data(self, mode):
@@ -74,9 +39,10 @@ class MemmInference:
         else:
             if word in self.freq_tags:
                 return self.freq_tags[word]
-            if not self.improved_mode:
-                return ['NNP', 'JJ', 'CD', 'NNS', 'DT', 'NN', 'IN', 'TO', 'VBD', 'VB', 'VBN', 'VBG', 'CC']
-            return self.tags
+            # if not self.improved_mode:
+            #     return ['NNP', 'JJ', 'CD', 'NNS', 'DT', 'NN', 'IN', 'TO', 'VBD', 'VB', 'VBN', 'VBG', 'CC']
+            # return self.tags
+            return ['NNP', 'NNS', 'NN', 'VBD', 'VB', 'VBN', 'RB', 'JJ', 'VBD', 'NNPS', 'VBZ', 'VBP', 'CD', 'VBG']
 
     def get_num_features_for_given_tuple(self, data_tuple):
         num_f = []
@@ -98,18 +64,18 @@ class MemmInference:
 
         # Improved
         if self.improved_mode:
-            if (self.get_suffix(word, 2), word_tag) in self.features:
-                num_f.append(self.features[(self.get_suffix(word, 2), word_tag)])
-            if (self.get_suffix(word, 3), word_tag) in self.features:
-                num_f.append(self.features[(self.get_suffix(word, 3), word_tag)])
-            if (self.get_prefix(word, 2), word_tag) in self.features:
-                num_f.append(self.features[(self.get_prefix(word, 2), word_tag)])
+            if (Utilities.get_suffix(word, 2), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_suffix(word, 2), word_tag)])
+            if (Utilities.get_suffix(word, 3), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_suffix(word, 3), word_tag)])
+            if (Utilities.get_prefix(word, 2), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_prefix(word, 2), word_tag)])
 
-            if self.check_number(word) and word_tag == 'CD':
+            if Utilities.check_number(word) and word_tag == 'CD':
                 num_f.append(self.features['number', 'number'])
-            if self.check_capital(word, word_index) and word_tag == 'NNP':
+            if Utilities.check_capital(word, word_index) and word_tag == 'NNP':
                 num_f.append(self.features['capital', 'capital'])
-            if self.check_bar(word) and word_tag == 'JJ':
+            if Utilities.check_bar(word) and word_tag == 'JJ':
                 num_f.append(self.features['bar', 'bar'])
 
         return num_f
