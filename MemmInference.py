@@ -70,10 +70,16 @@ class MemmInference:
                 num_f.append(self.features[(Utilities.get_suffix(word, 2), word_tag)])
             if (Utilities.get_suffix(word, 3), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_suffix(word, 3), word_tag)])
+            if (Utilities.get_suffix(word, 4), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_suffix(word, 4), word_tag)])
             if (Utilities.get_prefix(word, 2), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_prefix(word, 2), word_tag)])
             if (Utilities.get_prefix(word, 3), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_prefix(word, 3), word_tag)])
+            if (Utilities.get_prefix(word, 4), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_prefix(word, 4), word_tag)])
+            if (Utilities.get_prefix(word, 1), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_prefix(word, 1), word_tag)])
 
             if Utilities.check_number(word) and word_tag == 'CD':
                 num_f.append(self.features['number', 'number'])

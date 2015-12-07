@@ -241,7 +241,7 @@ class Trainer:
         self.get_frequented_features()
         print('After optimization, only ' + str(self.num_features) + ' features left\n')
 
-        print('Calculate features on all (history,tag) options - wait about 20 seconds...')
+        print('Calculate features on all (history,tag) options - wait a minute...')
         self.calculate_all_dot_f_for_tuple()
         print('Done calculating all possible features!\n')
         np.seterr(all='ignore')
