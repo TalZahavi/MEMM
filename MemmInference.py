@@ -64,12 +64,16 @@ class MemmInference:
 
         # Improved
         if self.improved_mode:
+            if (Utilities.get_suffix(word, 1), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_suffix(word, 1), word_tag)])
             if (Utilities.get_suffix(word, 2), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_suffix(word, 2), word_tag)])
             if (Utilities.get_suffix(word, 3), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_suffix(word, 3), word_tag)])
             if (Utilities.get_prefix(word, 2), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_prefix(word, 2), word_tag)])
+            if (Utilities.get_prefix(word, 3), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_prefix(word, 3), word_tag)])
 
             if Utilities.check_number(word) and word_tag == 'CD':
                 num_f.append(self.features['number', 'number'])
@@ -77,6 +81,8 @@ class MemmInference:
                 num_f.append(self.features['capital', 'capital'])
             if Utilities.check_bar(word) and word_tag == 'JJ':
                 num_f.append(self.features['bar', 'bar'])
+            if (word_tag, '') in self.features:
+                num_f.append(self.features[(word_tag, '')])
 
         return num_f
 

@@ -10,6 +10,8 @@ feature_bar_dict = dict()  # Check if the word has "-" in the middle, and the ta
 feature_suffix_dict = dict()  # Holds the tags for suffix (currently only length 3 suffix)
 feature_prefix_dict = dict()  # Holds the tags for prefix (currently only length 2 prefix)
 
+feature_tag_dict = dict()
+
 
 # Fill the features dicts according to the seen data
 def fill_features_dicts(self):
@@ -34,6 +36,8 @@ def fill_features_dicts(self):
         if (len(word)) > 3:
             add_general_suffix_to_dict(self, word, word_tag)
             add_general_prefix_to_dict(self, word, word_tag)
+
+        add_tag_to_dict(self, word_tag)
 
 
 # Fill the general suffix feature (Feature 101)
@@ -66,6 +70,20 @@ def add_general_suffix_to_dict(self, word, word_tag):
         feature_suffix_dict[suffix_2] = {word_tag: 1}
         self.num_features += 1
 
+    suffix_1 = Utilities.get_suffix(word, 1)
+
+    if suffix_1 in feature_suffix_dict:
+        suffix_tags_dict = feature_suffix_dict[suffix_1]
+
+        if word_tag in suffix_tags_dict:
+                suffix_tags_dict[word_tag] += 1
+        else:
+            suffix_tags_dict[word_tag] = 1
+            self.num_features += 1
+    else:
+        feature_suffix_dict[suffix_1] = {word_tag: 1}
+        self.num_features += 1
+
 
 # Fill the general prefix feature (Feature 102)
 def add_general_prefix_to_dict(self, word, word_tag):
@@ -84,11 +102,25 @@ def add_general_prefix_to_dict(self, word, word_tag):
         feature_prefix_dict[prefix_2] = {word_tag: 1}
         self.num_features += 1
 
+    prefix_3 = Utilities.get_prefix(word, 3)
+
+    if prefix_3 in feature_prefix_dict:
+        prefix_tags_dict = feature_prefix_dict[prefix_3]
+
+        if word_tag in prefix_tags_dict:
+            prefix_tags_dict[word_tag] += 1
+        else:
+            prefix_tags_dict[word_tag] = 1
+            self.num_features += 1
+
+    else:
+        feature_prefix_dict[prefix_3] = {word_tag: 1}
+        self.num_features += 1
+
 
 # Fill the number feature
 def add_number_to_dict(self):
     if 'number' in feature_number_dict:
-        self.num_features += 1
         feature_number_dict['number'] += 1
     else:
         self.num_features += 1
@@ -98,7 +130,6 @@ def add_number_to_dict(self):
 # Fill the capital feature
 def add_capital_to_dict(self):
     if 'capital' in feature_capital_dict:
-        self.num_features += 1
         feature_capital_dict['capital'] += 1
     else:
         self.num_features += 1
@@ -108,11 +139,18 @@ def add_capital_to_dict(self):
 # Fill the bar feature
 def add_bar_to_dict(self):
     if 'bar' in feature_bar_dict:
-        self.num_features += 1
         feature_bar_dict['bar'] += 1
     else:
         self.num_features += 1
         feature_bar_dict['bar'] = 1
+
+
+def add_tag_to_dict(self, word_tag):
+    if word_tag in feature_tag_dict:
+        feature_tag_dict[word_tag] += 1
+    else:
+        feature_tag_dict[word_tag] = 1
+        self.num_features += 1
 
 
 # Fill the 100 feature with a new seen feature
@@ -214,8 +252,15 @@ def get_frequented_features(self):
                         self.num_his_per_feature[counter] = tags_for_suffix_dict[tag_for_sux]
                         counter += 1
                         self.num_features += 1
-            else:
+            elif len(suffix) == 3:
                 if tags_for_suffix_dict[tag_for_sux] > 830:
+                    if (suffix, tag_for_sux) not in self.features:
+                        self.features[(suffix, tag_for_sux)] = counter
+                        self.num_his_per_feature[counter] = tags_for_suffix_dict[tag_for_sux]
+                        counter += 1
+                        self.num_features += 1
+            elif len(suffix) == 1:
+                if tags_for_suffix_dict[tag_for_sux] > 2500:
                     if (suffix, tag_for_sux) not in self.features:
                         self.features[(suffix, tag_for_sux)] = counter
                         self.num_his_per_feature[counter] = tags_for_suffix_dict[tag_for_sux]
@@ -225,12 +270,29 @@ def get_frequented_features(self):
     for prefix in feature_prefix_dict:
         tags_for_prefix_dict = feature_prefix_dict[prefix]
         for tag_for_pre in tags_for_prefix_dict:
-            if tags_for_prefix_dict[tag_for_pre] > 700:
-                if (prefix, tag_for_pre) not in self.features:
-                    self.features[(prefix, tag_for_pre)] = counter
-                    self.num_his_per_feature[counter] = tags_for_prefix_dict[tag_for_pre]
-                    counter += 1
-                    self.num_features += 1
+
+            if len(prefix) == 2:
+                if tags_for_prefix_dict[tag_for_pre] > 700:
+                    if (prefix, tag_for_pre) not in self.features:
+                        self.features[(prefix, tag_for_pre)] = counter
+                        self.num_his_per_feature[counter] = tags_for_prefix_dict[tag_for_pre]
+                        counter += 1
+                        self.num_features += 1
+            else:
+                if tags_for_prefix_dict[tag_for_pre] > 500:
+                    if (prefix, tag_for_pre) not in self.features:
+                        self.features[(prefix, tag_for_pre)] = counter
+                        self.num_his_per_feature[counter] = tags_for_prefix_dict[tag_for_pre]
+                        counter += 1
+                        self.num_features += 1
+
+    for tag in feature_tag_dict:
+        if feature_tag_dict[tag] > 3000:
+            if (tag, '') not in self.features:
+                self.features[(tag, '')] = counter
+                self.num_his_per_feature[counter] = feature_tag_dict[tag]
+                counter += 1
+                self.num_features += 1
 
     self.features[('number', 'number')] = counter
     self.num_his_per_feature[counter] = feature_number_dict['number']
@@ -265,7 +327,9 @@ def calculate_all_dot_f_for_tuple(self):
             tag_minus2 = history[0]
             suffix_3 = Utilities.get_suffix(word, 3)
             suffix_2 = Utilities.get_suffix(word, 2)
+            suffix_1 = Utilities.get_suffix(word, 1)
             prefix_2 = Utilities.get_prefix(word, 2)
+            prefix_3 = Utilities.get_prefix(word, 3)
 
             if (word, word_tag) in self.features:
                 temp_arr.append(self.features[(word, word_tag)])
@@ -278,14 +342,20 @@ def calculate_all_dot_f_for_tuple(self):
                 temp_arr.append(self.features[(suffix_3, word_tag)])
             if (suffix_2, word_tag) in self.features:
                 temp_arr.append(self.features[(suffix_2, word_tag)])
+            if (suffix_1, word_tag) in self.features:
+                temp_arr.append(self.features[(suffix_1, word_tag)])
             if (prefix_2, word_tag) in self.features:
                 temp_arr.append(self.features[(prefix_2, word_tag)])
+            if (prefix_3, word_tag) in self.features:
+                temp_arr.append(self.features[(prefix_3, word_tag)])
             if Utilities.check_number(word) and word_tag == 'CD':
                 temp_arr.append(self.features[('number', 'number')])
             if Utilities.check_capital(word, word_index) and word_tag == 'NNP':
                 temp_arr.append(self.features[('capital', 'capital')])
             if Utilities.check_bar(word) and word_tag == 'JJ':
                 temp_arr.append(self.features[('bar', 'bar')])
+            if (word_tag, '') in self.features:
+                temp_arr.append((self.features[word_tag, '']))
 
             self.calculated_features[(history, word_tag)] = temp_arr
 

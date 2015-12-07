@@ -216,6 +216,7 @@ class Trainer:
     ########################################################################
 
     def train(self, improved_mode):
+        start_start = datetime.now()
 
         if improved_mode == 'Improved':
             self.improved_mode = True
@@ -243,7 +244,7 @@ class Trainer:
         print('Calculate features on all (history,tag) options - wait about 20 seconds...')
         self.calculate_all_dot_f_for_tuple()
         print('Done calculating all possible features!\n')
-
+        np.seterr(all='ignore')
         v_vector_temp = np.zeros(shape=self.num_features)
         print('Lets try to find the best v... may take some time...(approximately 18 minutes)')
         start = datetime.now()
@@ -256,6 +257,7 @@ class Trainer:
         else:
             BasicModelFeatures.save_data_to_files(self)
         print('ALL DONE!')
+        print('THE ALL: ' + str(datetime.now() - start_start))
 
 x = Trainer()
 x.train('Improved')
