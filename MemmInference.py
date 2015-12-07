@@ -254,6 +254,7 @@ class MemmInference:
         f.close()
         print('\nThe final accuracy is ' + str(round((sum_correct/total)*100, 2)) + '%')
 
+    # THIS METHOD CREATE THE FILES FOR THE COMPETITION
     def inference_comp(self, mode):
         if mode == 'Improved':
             self.load_data('Improved')
@@ -283,8 +284,9 @@ class MemmInference:
 y = MemmInference()
 start = datetime.now()
 
-y.check_acq_for_file_with_tags('Comp')
-# y.inference_comp('Comp')
+# y.check_acq_for_file_with_tags('Comp')
+y.inference_comp('Comp')
+y.inference_comp('Basic')
 
 
 print('\nDone in ' + str(datetime.now()-start))
