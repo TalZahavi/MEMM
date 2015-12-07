@@ -15,22 +15,28 @@ class MemmInference:
 
         self.freq_tags = dict()
 
-        self.improved_mode = False
+        self.mode = 'Basic'
 
     # Load the data that was learned before
     def load_data(self, mode):
         if mode == 'Improved':
-            self.improved_mode = True
+            self.mode = 'Improved'
             self.v_vector = np.load('improved_opt_v.npy')
             self.tags = pickle.load(open("improved_tags.p", "rb"))
             self.features = pickle.load(open("improved_features_dict.p", "rb"))
             self.freq_tags = pickle.load(open("improved_freq_tags.p", "rb"))
-        else:
-            self.improved_mode = False
+        elif mode == 'Basic':
+            self.mode = 'Basic'
             self.v_vector = np.load('basic_opt_v.npy')
             self.tags = pickle.load(open("basic_tags.p", "rb"))
             self.features = pickle.load(open("basic_features_dict.p", "rb"))
             self.freq_tags = pickle.load(open("basic_freq_tags.p", "rb"))
+        else:
+            self.mode = 'Comp'
+            self.v_vector = np.load('comp_opt_v.npy')
+            self.tags = pickle.load(open("comp_tags.p", "rb"))
+            self.features = pickle.load(open("comp_features_dict.p", "rb"))
+            self.freq_tags = pickle.load(open("comp_freq_tags.p", "rb"))
 
     # Get all the possible tags at a position in the sentence
     def get_possible_tags_at_location(self, index, word):
@@ -39,9 +45,6 @@ class MemmInference:
         else:
             if word in self.freq_tags:
                 return self.freq_tags[word]
-            # if not self.improved_mode:
-            #     return ['NNP', 'JJ', 'CD', 'NNS', 'DT', 'NN', 'IN', 'TO', 'VBD', 'VB', 'VBN', 'VBG', 'CC']
-            # return self.tags
             return ['NNP', 'NNS', 'NN', 'VBD', 'VB', 'VBN', 'RB', 'JJ', 'VBD', 'NNPS', 'VBZ', 'VBP', 'CD', 'VBG']
 
     def get_num_features_for_given_tuple(self, data_tuple):
@@ -62,24 +65,13 @@ class MemmInference:
         if ((tag_minus2, tag_minus), word_tag) in self.features:
             num_f.append(self.features[((tag_minus2, tag_minus), word_tag)])
 
-        # Improved
-        if self.improved_mode:
-            if (Utilities.get_suffix(word, 1), word_tag) in self.features:
-                num_f.append(self.features[(Utilities.get_suffix(word, 1), word_tag)])
+        if self.mode == 'Improved' or self.mode == 'Comp':
             if (Utilities.get_suffix(word, 2), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_suffix(word, 2), word_tag)])
             if (Utilities.get_suffix(word, 3), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_suffix(word, 3), word_tag)])
-            if (Utilities.get_suffix(word, 4), word_tag) in self.features:
-                num_f.append(self.features[(Utilities.get_suffix(word, 4), word_tag)])
             if (Utilities.get_prefix(word, 2), word_tag) in self.features:
                 num_f.append(self.features[(Utilities.get_prefix(word, 2), word_tag)])
-            if (Utilities.get_prefix(word, 3), word_tag) in self.features:
-                num_f.append(self.features[(Utilities.get_prefix(word, 3), word_tag)])
-            if (Utilities.get_prefix(word, 4), word_tag) in self.features:
-                num_f.append(self.features[(Utilities.get_prefix(word, 4), word_tag)])
-            if (Utilities.get_prefix(word, 1), word_tag) in self.features:
-                num_f.append(self.features[(Utilities.get_prefix(word, 1), word_tag)])
 
             if Utilities.check_number(word) and word_tag == 'CD':
                 num_f.append(self.features['number', 'number'])
@@ -87,6 +79,20 @@ class MemmInference:
                 num_f.append(self.features['capital', 'capital'])
             if Utilities.check_bar(word) and word_tag == 'JJ':
                 num_f.append(self.features['bar', 'bar'])
+
+        # Features only for improved
+        if self.mode == 'Improved':
+            if (Utilities.get_suffix(word, 1), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_suffix(word, 1), word_tag)])
+            if (Utilities.get_suffix(word, 4), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_suffix(word, 4), word_tag)])
+            if (Utilities.get_prefix(word, 3), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_prefix(word, 3), word_tag)])
+            if (Utilities.get_prefix(word, 4), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_prefix(word, 4), word_tag)])
+            if (Utilities.get_prefix(word, 1), word_tag) in self.features:
+                num_f.append(self.features[(Utilities.get_prefix(word, 1), word_tag)])
+
             if (word_tag, '') in self.features:
                 num_f.append(self.features[(word_tag, '')])
 
@@ -228,8 +234,10 @@ class MemmInference:
             self.load_data('Improved')
         elif mode == 'Basic':
             self.load_data('Basic')
+        elif mode == 'Comp':
+            self.load_data('Comp')
         else:
-            print('PLEASE CHOOSE IMPROVED\BASIC!')
+            print('PLEASE CHOOSE IMPROVED\BASIC\COMP!')
             return
         num_sentence = 0
         sum_correct = 0
@@ -250,7 +258,7 @@ class MemmInference:
 y = MemmInference()
 start = datetime.now()
 
-y.check_acq_for_file_with_tags('Improved')
+y.check_acq_for_file_with_tags('Comp')
 
 
 print('\nDone in ' + str(datetime.now()-start))

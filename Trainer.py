@@ -3,6 +3,7 @@ import numpy as np
 from scipy.optimize import fmin_l_bfgs_b
 from BASIC import BasicModelFeatures
 from Improved import ImprovedModelFeature
+from Comp import CompModelFeature
 
 
 class Trainer:
@@ -34,7 +35,7 @@ class Trainer:
         self.freq_word_tag_dict = dict()
         self.word_to_freq_tags_dict = dict()
 
-        self.improved_mode = False
+        self.mode = 'Basic'
 
     # Count the number of tags for each word
     def fill_freq_tags_dict(self, word, tag):
@@ -96,19 +97,23 @@ class Trainer:
 
     # Fill the features dicts according to the seen data
     def fill_features_dicts(self):
-        if self.improved_mode:
+        if self.mode == 'Basic':
+            BasicModelFeatures.fill_features_dicts(self)
+        elif self.mode == 'Improved':
             ImprovedModelFeature.fill_features_dicts(self)
         else:
-            BasicModelFeatures.fill_features_dicts(self)
+            CompModelFeature.fill_features_dicts(self)
 
     # Remove features that seen only one time
     # Recount the features number
     # Add a little safety check for "duplicate features"
     def get_frequented_features(self):
-        if self.improved_mode:
+        if self.mode == 'Basic':
+            BasicModelFeatures.get_frequented_features(self)
+        elif self.mode == 'Improved':
             ImprovedModelFeature.get_frequented_features(self)
         else:
-            BasicModelFeatures.get_frequented_features(self)
+            CompModelFeature.get_frequented_features(self)
 
     # FUNCTION L(V)
     ################################################################
@@ -117,10 +122,12 @@ class Trainer:
     # Fill a dict, that : (history_tag) -> (num features that apply for him)
     # Need to preform only once
     def calculate_all_dot_f_for_tuple(self):
-        if self.improved_mode:
+        if self.mode == 'Basic':
+            BasicModelFeatures.calculate_all_dot_f_for_tuple(self)
+        elif self.mode == 'Improved':
             ImprovedModelFeature.calculate_all_dot_f_for_tuple(self)
         else:
-            BasicModelFeatures.calculate_all_dot_f_for_tuple(self)
+            CompModelFeature.calculate_all_dot_f_for_tuple(self)
 
     # Calculate v_dot_f for a given tuple and a vector v
     def calculate_v_dot_f_for_tuple2(self, data_tuple, v_vector):
@@ -218,14 +225,10 @@ class Trainer:
     def train(self, improved_mode):
         start_start = datetime.now()
 
-        if improved_mode == 'Improved':
-            self.improved_mode = True
-            print('\nStarted IMPROVED mode training')
-        elif improved_mode == 'Basic':
-            self.improved_mode = False
-            print('\nStarted BASIC mode training')
+        if improved_mode == 'Improved' or improved_mode == 'Basic' or improved_mode == 'Comp':
+            self.mode = improved_mode
         else:
-            print('You need to choose improved or basic mode!')
+            print('You need to choose improved/basic/comp mode!')
             return
 
         self.get_history_tag_tuples()
@@ -252,15 +255,17 @@ class Trainer:
         self.v_vec = res[0]
         print('Found the best v only in ' + str(datetime.now()-start) + '!! ITS A NEW RECORD!!!')
         print('\nSaving the data...')
-        if self.improved_mode:
+        if self.mode == 'Basic':
+            BasicModelFeatures.save_data_to_files(self)
+        elif self.mode == 'Improved':
             ImprovedModelFeature.save_data_to_files(self)
         else:
-            BasicModelFeatures.save_data_to_files(self)
+            CompModelFeature.save_data_to_files(self)
         print('ALL DONE!')
         print('THE ALL: ' + str(datetime.now() - start_start))
 
 x = Trainer()
-x.train('Improved')
+x.train('Comp')
 
 
 
