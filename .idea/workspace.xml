@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7c0a5f1c-e8bc-4412-b0dc-85a0291fe492" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Memm.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MemmInference.py" afterPath="$PROJECT_DIR$/MemmInference.py" />
     </list>
     <ignored path="MEMM.iws" />
@@ -28,8 +26,8 @@
       <file leaf-file-name="MemmInference.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MemmInference.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25357142">
-              <caret line="255" column="0" selection-start-line="255" selection-start-column="0" selection-end-line="255" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.09642857">
+              <caret line="273" column="48" selection-start-line="273" selection-start-column="48" selection-end-line="273" selection-end-column="48" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
                 <element signature="e#135#432#0" expanded="false" />
@@ -44,7 +42,6 @@
                 <element signature="e#7879#8084#0" expanded="false" />
                 <element signature="e#8231#8767#0" expanded="false" />
                 <element signature="e#8898#9762#0" expanded="false" />
-                <element signature="e#9863#10665#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -535,7 +532,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -600,7 +596,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -665,7 +660,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -730,7 +724,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -773,7 +766,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -818,7 +810,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -863,7 +854,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -908,7 +898,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1200,8 +1189,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MemmInference.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25357142">
-          <caret line="255" column="0" selection-start-line="255" selection-start-column="0" selection-end-line="255" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.09642857">
+          <caret line="273" column="48" selection-start-line="273" selection-start-column="48" selection-end-line="273" selection-end-column="48" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
             <element signature="e#135#432#0" expanded="false" />
@@ -1216,7 +1205,6 @@
             <element signature="e#7879#8084#0" expanded="false" />
             <element signature="e#8231#8767#0" expanded="false" />
             <element signature="e#8898#9762#0" expanded="false" />
-            <element signature="e#9863#10665#0" expanded="false" />
           </folding>
         </state>
       </provider>

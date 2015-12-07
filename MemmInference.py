@@ -271,6 +271,7 @@ class MemmInference:
         else:
             f_w = open('comp_m2_200279040.wtag', 'w+')
         counter_sen = 0
+        print('Start working... wait a minute...')
         with open('comp.words', 'r') as f:
             for line in f:
                 counter_sen += 1
